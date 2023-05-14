@@ -1,0 +1,8 @@
+
+
+class CMap {
+	public:
+
+	protected:
+		
+};
