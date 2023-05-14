@@ -62,11 +62,11 @@ http://programujte.com/clanek/2011010900-chovani-duchu-ve-hre-pac-man-cast-2/
 
 ## Polymorfismus
 
-    Polymorfismus bude ve hře využit například v chování jednotlivých duchů, kdy každý bude mít v základu podobné chování, ale u každého ze tří duchů se bude mírně lišit.
-        * 1. duch bude náhodně chodit po mapě a nebude si všímat hráče
-        * 2. duch bude hráče pronásledovat
-        * 3. duch bude nějak zjednodušeně předvídat hráčův pohyb
+   Polymorfismus bude ve hře využit například v chování jednotlivých duchů, kdy každý bude mít v základu podobné chování, ale u každého ze tří duchů se bude mírně lišit.
+    * 1. duch bude náhodně chodit po mapě a nebude si všímat hráče
+    * 2. duch bude hráče pronásledovat
+    * 3. duch bude nějak zjednodušeně předvídat hráčův pohyb
 
-    Polymorfismus využiji ale i v obecném pohybu entit po mapě, kdy každá entita se bude nějak pohybovat, takže bude de facto výchazet ze stejném třídy, ale způsob pohybu se bude lišit pro každou entitu. Pacman se bude pohybovat pomocí vstupu od hráče a duchové se budou pohybovat pomocí žejednodušeného AI.
+   Polymorfismus využiji ale i v obecném pohybu entit po mapě, kdy každá entita se bude nějak pohybovat, takže bude de facto výchazet ze stejném třídy, ale způsob pohybu se bude lišit pro každou entitu. Pacman se bude   pohybovat pomocí vstupu od hráče a duchové se budou pohybovat pomocí žejednodušeného AI.
 
-    Polymorfismus by se případně dal využít i v uživatelském rozhraní, ale upřímně si ještě zatím nejsem 100% jistý, jakým způsobem budu uživatelské rozhraní zpracovávat.
+   Polymorfismus by se případně dal využít i v uživatelském rozhraní, ale upřímně si ještě zatím nejsem 100% jistý, jakým způsobem budu uživatelské rozhraní zpracovávat.
