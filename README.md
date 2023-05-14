@@ -28,9 +28,9 @@ Implementujte hru Pacman. Hlavní postava Pacman se snaží sesbírat všechny m
 
 * Není nutné implementovat přesnou kopii hry Pac Man, zamyslete se, jakým způsobem můžete základní požadavky rozšířit a udělat hru zajímavější. Nápady na rozšíření: náhodné generování bonusů nebo herních úrovní, nové druhy bonusů, klíče a dveře, zasazení do příběhu.
 * Poznámka 29.4.2023: Není nutné implementovat hru real-time, hra může být i tahová.
-https://cs.wikipedia.org/wiki/Pac-Man
-http://programujte.com/clanek/2011010500-chovani-duchu-ve-hre-pac-man-cast-1/
-http://programujte.com/clanek/2011010900-chovani-duchu-ve-hre-pac-man-cast-2/
+https://cs.wikipedia.org/wiki/Pac-Man  
+http://programujte.com/clanek/2011010500-chovani-duchu-ve-hre-pac-man-cast-1/  
+http://programujte.com/clanek/2011010900-chovani-duchu-ve-hre-pac-man-cast-2/  
 
 
 ## Specifikace
@@ -63,9 +63,9 @@ http://programujte.com/clanek/2011010900-chovani-duchu-ve-hre-pac-man-cast-2/
 ## Polymorfismus
 
    Polymorfismus bude ve hře využit například v chování jednotlivých duchů, kdy každý bude mít v základu podobné chování, ale u každého ze tří duchů se bude mírně lišit.
-   * 1. duch bude náhodně chodit po mapě a nebude si všímat hráče
-   * 2. duch bude hráče pronásledovat
-   * 3. duch bude nějak zjednodušeně předvídat hráčův pohyb
+   * 1.duch bude náhodně chodit po mapě a nebude si všímat hráče
+   * 2.duch bude hráče pronásledovat
+   * 3.duch bude nějak zjednodušeně předvídat hráčův pohyb
 
    Polymorfismus využiji ale i v obecném pohybu entit po mapě, kdy každá entita se bude nějak pohybovat, takže bude de facto výchazet ze stejném třídy, ale způsob pohybu se bude lišit pro každou entitu. Pacman se bude   pohybovat pomocí vstupu od hráče a duchové se budou pohybovat pomocí žejednodušeného AI.
 
