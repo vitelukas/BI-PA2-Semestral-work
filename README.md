@@ -27,7 +27,7 @@ Implementujte hru Pacman. Hlavní postava Pacman se snaží sesbírat všechny m
 ## Další informace:
 
 * Není nutné implementovat přesnou kopii hry Pac Man, zamyslete se, jakým způsobem můžete základní požadavky rozšířit a udělat hru zajímavější. Nápady na rozšíření: náhodné generování bonusů nebo herních úrovní, nové druhy bonusů, klíče a dveře, zasazení do příběhu.
-* Poznámka 29.4.2023: Není nutné implementovat hru real-time, hra může být i tahová.
+* Poznámka 29.4.2023: Není nutné implementovat hru real-time, hra může být i tahová.  
 https://cs.wikipedia.org/wiki/Pac-Man  
 http://programujte.com/clanek/2011010500-chovani-duchu-ve-hre-pac-man-cast-1/  
 http://programujte.com/clanek/2011010900-chovani-duchu-ve-hre-pac-man-cast-2/  
