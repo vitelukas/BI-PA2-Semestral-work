@@ -1,7 +1,4 @@
-#include <iostream>
-#include <string>
-#include <cstdio>
-#include <cstdlib>
+#include <stdio.h>
 #include <ncurses.h>
 #include "CMainMenu.hpp"
 
@@ -11,7 +8,6 @@ int main() {
 	CMainMenu menu;
 	initscr();
 
-	// Show initial dialog info
 	menu.run();
 
 	endwin();
