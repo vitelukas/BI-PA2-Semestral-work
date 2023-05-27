@@ -6,14 +6,19 @@
 #include "CGhost_2.hpp"
 #include "CGhost_3.hpp"
 
+#pragma once
+
 
 class CGame {
 	public:
-		CGame() = default;
-		~CGame() = default;
+		void run();
+
+		void update();
+
+		bool reloadMap(); 
 
 	protected:
-		CMap m_Map;
+		CMap m_Map;	
 		CPlayer m_Player;
 		CGhost_1 m_Ghost_1;
 		CGhost_2 m_Ghost_2;

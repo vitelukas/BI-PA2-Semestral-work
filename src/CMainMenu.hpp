@@ -1,24 +1,33 @@
 #include <iostream>
 #include <string>
 #include <ncurses.h>
+#include <fstream>
+#include <vector>
 #include "CLeaderBoard.hpp"
+#include "CGameMode.hpp"
+#include "CGame.hpp"
+
+#pragma once
 
 class CMainMenu {
 	public:
         CMainMenu();
-		~CMainMenu();
+		
+		/* Will also show "initial dialog info" */
+        void run();
 
-		void startGame();
-
-		void end();
+        void prnt();
 
 		void update();
-    
-        void run();
-        
-        void prnt();
+
+		void startGame();
 	
+		void end();
+
 	protected:	
-		int cursPos;
-		CLeaderBoard leaderBoard;
+		int m_CursorPos, m_MenuItemStart, m_MenuItemEnd, m_xOffset;
+		size_t m_Height, m_Width;
+		CLeaderBoard m_LeaderBoard;
+		CGameMode m_GameMode;
+		CGame m_Game;
 };

@@ -5,10 +5,15 @@
 using namespace std;
 
 int main() {
-	CMainMenu menu;
 	initscr();
+    curs_set(0);
+	cbreak();
+    noecho();
+
+	CMainMenu menu;
 
 	menu.run();
 
 	endwin();
+	return 0;
 }

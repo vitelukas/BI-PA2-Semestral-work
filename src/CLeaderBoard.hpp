@@ -1,9 +1,8 @@
+#pragma once
 
 class CLeaderBoard {
 	public:
         CLeaderBoard();
-		~CLeaderBoard();
-
 	
 	protected:	
 };
