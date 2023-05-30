@@ -9,6 +9,11 @@ int main() {
     curs_set(0);
 	cbreak();
     noecho();
+	start_color();
+	if (assume_default_colors(-1, -1) == OK) {
+        use_default_colors();
+    }
+
 
 	CMainMenu menu;
 

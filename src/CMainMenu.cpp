@@ -5,7 +5,8 @@ CMainMenu::CMainMenu() {
     clear();
     m_CursorPos = 10;
     m_MenuItemStart = 10;
-    m_MenuItemEnd = 13;
+    m_ChooseDiffPosition = m_MenuItemStart + 1;
+    m_MenuItemEnd = m_MenuItemStart + 3;
     m_xOffset = 65;
 	m_Width = 100;
 	m_Height = 100;
@@ -28,6 +29,7 @@ void CMainMenu::run() {
     while(true){
         move(m_MenuItemStart, m_xOffset);
         getInput = getch();
+
         if( getInput == 'w' ) {
             m_CursorPos--;
         }
@@ -42,13 +44,20 @@ void CMainMenu::run() {
 			m_CursorPos = m_MenuItemStart;
 		}
 
-        if( getInput == '\n' && m_CursorPos == m_MenuItemEnd) {
-			end();
-            return;
-		}
-        else if ( getInput == '\n' && m_CursorPos == m_MenuItemStart ) {
-			startGame();
-		}
+        // Choose what action should be performed based on the cursor position
+        if (getInput == '\n') {
+            if ( m_CursorPos == m_MenuItemStart ) {
+                m_Game.run();
+                return;
+            }
+            if ( m_CursorPos == m_ChooseDiffPosition) {
+                chooseDifficulty();
+            }
+            else if( m_CursorPos == m_MenuItemEnd ) {
+                end();
+                return;
+            }
+        }
 
         update();
         prnt();
@@ -82,7 +91,7 @@ void:: CMainMenu::prnt() {
     return;
 }
 
-void:: CMainMenu::startGame() {
+void CMainMenu::chooseDifficulty() {
     return;
 }
 

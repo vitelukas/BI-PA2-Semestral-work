@@ -15,7 +15,7 @@ class CGame {
 
 		void update();
 
-		bool reloadMap(); 
+		void reloadMap();
 
 	protected:
 		CMap m_Map;	

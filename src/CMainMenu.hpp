@@ -20,12 +20,12 @@ class CMainMenu {
 
 		void update();
 
-		void startGame();
+		void chooseDifficulty();
 	
 		void end();
 
 	protected:	
-		int m_CursorPos, m_MenuItemStart, m_MenuItemEnd, m_xOffset;
+		int m_CursorPos, m_MenuItemStart, m_MenuItemEnd, m_xOffset, m_ChooseDiffPosition;
 		size_t m_Height, m_Width;
 		CLeaderBoard m_LeaderBoard;
 		CGameMode m_GameMode;
