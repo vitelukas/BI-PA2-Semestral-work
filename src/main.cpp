@@ -13,11 +13,14 @@ int main() {
 	if (assume_default_colors(-1, -1) == OK) {
         use_default_colors();
     }
+	
 
+	int again = 1;
+	while (again) {		
+		CMainMenu mainMenu;
 
-	CMainMenu menu;
-
-	menu.run();
+		again = mainMenu.run();
+	}
 
 	endwin();
 	return 0;

@@ -8,7 +8,7 @@ OBJS= $(SRCDIR)/main.o $(SRCDIR)/CMainMenu.o $(SRCDIR)/CLeaderBoard.o $(SRCDIR)/
 all: Pacman
 
 Pacman: $(OBJS)
-	$(LD) $(CXXFLAGS) -o $@ $^ $(LIBS)
+	$(LD) $(CXXFLAGS) -o $@ $^ $(LIBS) 
 
 $(SRCDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
@@ -18,5 +18,11 @@ clean:
 
 deps:
 	$(CXX) -MM $(SRCDIR)/*.cpp > Makefile.d
+
+run:
+	valgrind ./Pacman
+
+save:
+	@find . -type f -exec touch {} \;
 
 -include Makefile.d

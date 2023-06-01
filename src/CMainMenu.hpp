@@ -12,16 +12,20 @@
 class CMainMenu {
 	public:
         CMainMenu();
+
+		~CMainMenu();
 		
 		/* Will also show "initial dialog info" */
-        void run();
+        int run();
 
         void prnt();
 
 		void update();
 
 		void chooseDifficulty();
-	
+		
+		void signLeaderBoard();
+
 		void end();
 
 	protected:	

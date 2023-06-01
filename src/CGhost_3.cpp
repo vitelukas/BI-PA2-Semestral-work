@@ -5,6 +5,6 @@ CGhost_3::CGhost_3() {
 	m_Position = {30 ,30};
 }
 
-void CGhost_3::move(){
+void CGhost_3::move(CMap &) {
 	return;
 }

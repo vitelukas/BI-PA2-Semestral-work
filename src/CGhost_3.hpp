@@ -5,7 +5,7 @@ class CGhost_3 : public CEntity{
 	public:
         CGhost_3();
 
-		virtual void move() override;
+		virtual void move(CMap &) override;
 	
 	protected:
 };

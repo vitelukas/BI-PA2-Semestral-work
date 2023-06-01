@@ -11,13 +11,19 @@
 
 class CGame {
 	public:
+		CGame();
+
 		void run();
 
 		void update();
 
 		void reloadMap();
 
+		void setEntities(char entity, int x, int y);
+
 	protected:
+		bool m_GameIsDone;
+		size_t m_ScoreToWin;
 		CMap m_Map;	
 		CPlayer m_Player;
 		CGhost_1 m_Ghost_1;

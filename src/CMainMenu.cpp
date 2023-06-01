@@ -7,26 +7,29 @@ CMainMenu::CMainMenu() {
     m_MenuItemStart = 10;
     m_ChooseDiffPosition = m_MenuItemStart + 1;
     m_MenuItemEnd = m_MenuItemStart + 3;
-    m_xOffset = 65;
-	m_Width = 100;
-	m_Height = 100;
+	getmaxyx(stdscr, m_Height, m_Width); 
+    m_xOffset = (getmaxx(stdscr) / 2) - 3;
 
     // int height = 20;
     // int width = 20;
     // int start_y = 10;
     // int start_x = 10;
-
     // WINDOW *menuWin = newwin(height, width, start_y, start_x);
     // refresh();
     // box (menuWin, 0, 0);
     // wrefresh(menuWin);
 }
 
-void CMainMenu::run() {
-    update();
+CMainMenu::~CMainMenu() {
+    endwin();
+}
+
+int CMainMenu::run() {
     
     char getInput;
     while(true){
+        update();
+
         move(m_MenuItemStart, m_xOffset);
         getInput = getch();
 
@@ -48,21 +51,19 @@ void CMainMenu::run() {
         if (getInput == '\n') {
             if ( m_CursorPos == m_MenuItemStart ) {
                 m_Game.run();
-                return;
+                // RESET THE GAME...
+                signLeaderBoard();
+                return 1;
             }
             if ( m_CursorPos == m_ChooseDiffPosition) {
                 chooseDifficulty();
             }
             else if( m_CursorPos == m_MenuItemEnd ) {
-                end();
-                return;
+                return 0;
             }
         }
 
-        update();
-        prnt();
     }
-    return;
 }
 
 void:: CMainMenu::update() {
@@ -86,7 +87,7 @@ void:: CMainMenu::prnt() {
     mvprintw(y++, x, "show leader board\n");
     mvprintw(y++, x, "end\n");
 
-    move(29, 0);
+    move(m_Height - 8, 0);
     printw("Controls:\nUp -> w\nDown -> s\nLeft -> a\nRight -> d\n\nPress enter to confirm your choice");
     return;
 }
@@ -95,6 +96,6 @@ void CMainMenu::chooseDifficulty() {
     return;
 }
 
-void:: CMainMenu::end() {
+void CMainMenu::signLeaderBoard() {
     return;
 }
