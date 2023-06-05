@@ -1,10 +1,10 @@
-#include <stdio.h>
-#include <iostream>
 #include "CMap.hpp"
 #include "CPlayer.hpp"
 #include "CGhost_1.hpp"
 #include "CGhost_2.hpp"
 #include "CGhost_3.hpp"
+#include <stdio.h>
+#include <iostream>
 
 #pragma once
 
@@ -15,11 +15,15 @@ class CGame {
 
 		void run();
 
+		void initializeGame();
+
 		void update();
 
 		void reloadMap();
 
-		void setEntities(char entity, int x, int y);
+		void setEntities(char entity, size_t x, size_t y);
+
+		void transformMap();
 
 	protected:
 		bool m_GameIsDone;

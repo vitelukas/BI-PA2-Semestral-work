@@ -29,9 +29,11 @@ int CMainMenu::run() {
     char getInput;
     while(true){
         update();
-
+        
+        // move the cursor
         move(m_MenuItemStart, m_xOffset);
-        getInput = getch();
+
+        getInput = tolower(getch());
 
         if( getInput == 'w' ) {
             m_CursorPos--;
@@ -50,8 +52,8 @@ int CMainMenu::run() {
         // Choose what action should be performed based on the cursor position
         if (getInput == '\n') {
             if ( m_CursorPos == m_MenuItemStart ) {
+                //todo Choose difficulty
                 m_Game.run();
-                // RESET THE GAME...
                 signLeaderBoard();
                 return 1;
             }

@@ -15,13 +15,21 @@ class CPlayer : public CEntity{
 
 		void mvRight(CMap &);
 
-		bool checkCollisions(CMap &);
+		bool checkCollisions(CMap &) override;
 		
 		void collectCoin(CMap &);
+
+		void undoCollision(int , int, CMap &);
+
+		void decideMoveDirection(CMap &);
 	
 	protected:
+		char m_Direction, m_PrevDirection;
 		unsigned int m_Lifes;
 		unsigned int m_Score;
 		char m_Character;
 		friend class CGame;
+
+    	std::chrono::milliseconds m_ElapsedTime;
+    	std::chrono::steady_clock::time_point m_PreviousTime;
 };

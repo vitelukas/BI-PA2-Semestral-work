@@ -8,3 +8,7 @@ CGhost_2::CGhost_2() {
 void CGhost_2::move(CMap &) {
 	return;
 }
+
+bool CGhost_2::checkCollisions(CMap &gameMap) {
+	return false;
+}

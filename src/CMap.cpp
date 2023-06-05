@@ -3,20 +3,23 @@ using namespace std;
 
 
 CMap::CMap() 
-	:m_CharMap()
+	:m_Height(0), m_Width(0), m_CoinCharr('.'), m_CharMap()
 {
-	m_Height = 0;
-	m_Width = 0;
-	m_TeleportIn = m_TeleportOut = {INT_MAX, INT_MAX};
+	m_TeleportIn = m_TeleportOut = make_pair(SIZE_MAX, SIZE_MAX);
 	m_AsciiToSymbolMap = {
-		{'#', '#'},
-        {'.', '.'},
         {'p', 'O'},
         {'&', '&'},
         {'@', '@'},
         {'0', '0'},
         {'B', 'B'},
+        {'.', '.'},
 	};
+
+	// init_color(COLOR_BLUE, 000, 000, 600 );
+	init_pair(1, COLOR_BLUE, COLOR_BLUE);
+	init_pair(2, COLOR_YELLOW, -1); // Use the default color for background
+	init_pair(3, COLOR_RED, -1);
+	init_pair(4, COLOR_BLACK, COLOR_YELLOW);
 }
 
 void CMap::loadMap(const string &fileName) {
@@ -24,36 +27,16 @@ void CMap::loadMap(const string &fileName) {
 
     if ( !mapFile.is_open() ) {
 		cerr << "Error while opening the map file!" << endl;
-		throw std::runtime_error("Failed to open the map file.");
+		throw runtime_error("Failed to open the map file.");
 	}
 	
 	string line;
-	int x, y;
-	x = y = 0;
 	while (getline(mapFile, line)) {
 		vector<char> mapRow;
 		for (char c : line) {
-			auto it = m_AsciiToSymbolMap.find(c);
-			
-			if ( c == 'T') {
-				endwin();
-				if ( m_TeleportIn == make_pair(INT_MAX, INT_MAX))
-					m_TeleportIn = make_pair(y, x);
-				m_TeleportOut = make_pair(y, x);
-			}
-				
-
-			if (it != m_AsciiToSymbolMap.end()) {
-				mapRow.push_back(it->second);
-			} else {
-				// Char in the config map file is not mapped -> leave the original char
-				mapRow.push_back(c);
-			}
-			x++;
+			mapRow.push_back(c);
 		}
 		m_CharMap.push_back(mapRow);
-		x = 0;
-		y++;
 	}
 
 	mapFile.close();
@@ -62,16 +45,10 @@ void CMap::loadMap(const string &fileName) {
 	m_Width = m_CharMap[0].size();
 }
 
-void CMap::showMap () {
+void CMap::printMap () {
 	clear();
 
-	// init_color(COLOR_BLUE, 000, 000, 600 );
-	init_pair(1, COLOR_BLUE, COLOR_BLUE);
-	init_pair(2, COLOR_YELLOW, -1); // Use the default color for background
-	init_pair(3, COLOR_RED, -1);
-	init_pair(4, COLOR_YELLOW, -1);
-
-	int maxY, maxX;
+	size_t maxY, maxX;
     getmaxyx(stdscr, maxY, maxX);
 
 	// Check if the map can fit the screen
@@ -81,7 +58,7 @@ void CMap::showMap () {
         return;
     }
 
-	for (int y = 0; y < m_Height; y++) {
+	for (size_t y = 0; y < m_Height; y++) {
         for (size_t x = 0; x < m_CharMap[y].size(); x++) {
 			switch (m_CharMap[y][x]) {
 				case '#':
@@ -117,4 +94,13 @@ void CMap::showMap () {
     }
 
     refresh();
-} 
+}
+
+void CMap::transformMap(char tile, size_t y, size_t x) {
+	auto it = m_AsciiToSymbolMap.find(tile);	
+
+	if (it != m_AsciiToSymbolMap.end())
+		m_CharMap[y][x] = it->second;
+	else
+		m_CharMap[y][x] = tile;
+}

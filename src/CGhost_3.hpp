@@ -6,6 +6,8 @@ class CGhost_3 : public CEntity{
         CGhost_3();
 
 		virtual void move(CMap &) override;
+
+		virtual bool checkCollisions(CMap &) override;
 	
 	protected:
 };

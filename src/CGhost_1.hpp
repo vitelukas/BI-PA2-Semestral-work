@@ -7,5 +7,7 @@ class CGhost_1 : public CEntity{
 
 		virtual void move(CMap &) override;
 
+		virtual bool checkCollisions(CMap &) override;
+
 	protected:
 };
