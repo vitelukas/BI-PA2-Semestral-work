@@ -5,6 +5,8 @@ class CPlayer : public CEntity{
 	public:
         CPlayer();
 
+		virtual ~CPlayer() = default;
+
 		virtual void move(CMap &) override;
 
 		void mvUp(CMap &);
@@ -24,12 +26,13 @@ class CPlayer : public CEntity{
 		void decideMoveDirection(CMap &);
 	
 	protected:
-		char m_Direction, m_PrevDirection;
+		char m_PrevDirection;
 		unsigned int m_Lifes;
 		unsigned int m_Score;
 		char m_Character;
-		friend class CGame;
-
     	std::chrono::milliseconds m_ElapsedTime;
-    	std::chrono::steady_clock::time_point m_PreviousTime;
+		friend class CGame;
+		friend class CGhost_1;
+		friend class CGhost_2;
+		friend class CGhost_3;
 };

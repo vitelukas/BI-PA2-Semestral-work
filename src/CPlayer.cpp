@@ -4,10 +4,9 @@ using namespace std::chrono;
 
 
 CPlayer::CPlayer() {
-	m_Direction = m_PrevDirection = 'n';
+	m_PrevDirection = 'n';
 	m_Score = 0;
 	m_Lifes = 3;
-	m_Position = {0, 0};
 	m_Character = 'p';
 
 	m_Speed = milliseconds(160);
@@ -15,8 +14,8 @@ CPlayer::CPlayer() {
     m_PreviousTime = steady_clock::now(); // Initialize m_PreviousTime to the current time point
 }
 
-void CPlayer::move(CMap &gameMap) {
-	steady_clock::time_point currentTime = steady_clock::now();
+void CPlayer::move(CMap & gameMap) {
+	auto currentTime = steady_clock::now();
     m_ElapsedTime = duration_cast<milliseconds>(currentTime - m_PreviousTime);
 
 	pair<size_t, size_t> prevPosition;
@@ -41,7 +40,6 @@ void CPlayer::move(CMap &gameMap) {
 		}
 
 		m_PrevDirection = m_Direction;
-		currentTime = steady_clock::now();
         m_PreviousTime = currentTime;
     }
 	

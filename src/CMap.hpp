@@ -14,11 +14,11 @@ class CMap {
 	public:
 		CMap();
 
-		void loadMap ( const string & );
+		void loadMap(const string & );
 
 		void transformMap(char, size_t, size_t);
 
-		void printMap ();
+		void printMap();
 
 	private:
 		size_t m_Height, m_Width;

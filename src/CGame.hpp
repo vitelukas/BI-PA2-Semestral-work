@@ -23,8 +23,6 @@ class CGame {
 
 		void setEntities(char entity, size_t x, size_t y);
 
-		void transformMap();
-
 	protected:
 		bool m_GameIsDone;
 		size_t m_ScoreToWin;

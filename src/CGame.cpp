@@ -13,13 +13,17 @@ void CGame::run() {
     while (!m_GameIsDone) {
         update();
         m_Player.move(m_Map);
-        m_Ghost_1.move(m_Map);
+
+        m_Ghost_1.move(m_Map, m_Player);
+
+        m_Ghost_3.move(m_Map, m_Player);
     }
 
     return;
 }
 
-void CGame::initializeGame() {   
+void CGame::initializeGame() {
+    clear();   
     m_Map.loadMap("examples/main_map.txt");
 
     for (size_t y = 0; y < m_Map.m_Height; y++) {
@@ -29,23 +33,27 @@ void CGame::initializeGame() {
             m_Map.transformMap(entity, y, x );
         }
     }
-    
+
+    //todo include into game difficulty setting and delete from here ↓ 
+    m_Ghost_1.m_Speed = m_Ghost_2.m_Speed = m_Ghost_3.m_Speed = m_Player.m_Speed;
+
     m_Map.printMap();
 }
 
 void CGame::update() {
     mvprintw(m_Map.m_Height + 1, 0, "Score: %d", m_Player.m_Score);
     mvprintw(m_Map.m_Height + 2, 0, "Lifes: %d", m_Player.m_Lifes);
-    mvprintw(30, 0, "Player position y,x: %zu, %zu", m_Player.m_Position.first, m_Player.m_Position.second);
-    mvprintw(31, 0, "TPin position y,x: %zu, %zu", m_Map.m_TeleportIn.first, m_Map.m_TeleportIn.second);
-    mvprintw(32, 0, "TPout position y,x: %zu, %zu", m_Map.m_TeleportOut.first, m_Map.m_TeleportOut.second);
     
     m_GameIsDone = m_Player.m_Score == m_ScoreToWin;
+
+    //todo check collisions between the player and a ghost
+    //todo if there was a collision set entities into the original places
 
     reloadMap();
 }
 
-void CGame::reloadMap() {   
+void CGame::reloadMap() {  
+    // Only refreshes the changed cells, not the whole screen
     refresh();
 }
 

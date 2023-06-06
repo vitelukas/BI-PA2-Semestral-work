@@ -17,9 +17,11 @@ CMap::CMap()
 
 	// init_color(COLOR_BLUE, 000, 000, 600 );
 	init_pair(1, COLOR_BLUE, COLOR_BLUE);
-	init_pair(2, COLOR_YELLOW, -1); // Use the default color for background
+	init_pair(2, COLOR_YELLOW, -1); // -1 == use the default color for background
 	init_pair(3, COLOR_RED, -1);
 	init_pair(4, COLOR_BLACK, COLOR_YELLOW);
+	init_pair(5, COLOR_BLACK, COLOR_RED);
+	init_pair(6, COLOR_BLACK, COLOR_WHITE);
 }
 
 void CMap::loadMap(const string &fileName) {
@@ -60,7 +62,8 @@ void CMap::printMap () {
 
 	for (size_t y = 0; y < m_Height; y++) {
         for (size_t x = 0; x < m_CharMap[y].size(); x++) {
-			switch (m_CharMap[y][x]) {
+			char ch = m_CharMap[y][x];
+			switch (ch) {
 				case '#':
 					attron(COLOR_PAIR(1)); 
 					mvaddch(y, x, m_CharMap[y][x]);

@@ -5,7 +5,7 @@ CGhost_2::CGhost_2() {
 	m_Position = {20 ,20};
 }
 
-void CGhost_2::move(CMap &) {
+void CGhost_2::move(CMap & gameMap) {
 	return;
 }
 

@@ -5,23 +5,28 @@
 
 class CEntity {
 	public:
-        CEntity()
-			: m_Position(0,0)
-		{}
+        CEntity();
 
 		virtual ~CEntity() {}
-
-		virtual void move(CMap &) = 0;
+		
+		virtual void move(CMap &);
 
 		virtual bool checkCollisions(CMap &);
 
-		virtual bool wallCollision(CMap);
+		bool wallCollision(CMap);
 
-		virtual bool corridorCollision(vector<vector<char>>);
-	
+		bool corridorCollision(vector<vector<char>>);
+
+		bool checkDirectionOK(char);
+
+		void formatTile(char&);
+
 	protected:
 		//		y		x
 		pair<size_t, size_t> m_Position;
 		std::chrono::milliseconds m_Speed;
+    	std::chrono::steady_clock::time_point m_PreviousTime;
+		unordered_map<char, char> m_backDirections;
+		char m_Direction;
 		friend class CGame;
 };

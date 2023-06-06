@@ -9,11 +9,12 @@ int main() {
     curs_set(0);
 	cbreak();
     noecho();
-	start_color();
+	if (has_colors())
+		start_color();
+
 	if (assume_default_colors(-1, -1) == OK) {
         use_default_colors();
     }
-	
 
 	int again = 1;
 	while (again) {		

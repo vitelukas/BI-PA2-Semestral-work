@@ -1,13 +1,28 @@
 #include "CEntity.hpp"
+#include "CPlayer.hpp"
+#include <thread>
 #pragma once
 
-class CGhost_1 : public CEntity{
+class CGhost_1 : public CEntity {
 	public:
         CGhost_1();
 
-		virtual void move(CMap &) override;
+		virtual ~CGhost_1() = default;
 
-		virtual bool checkCollisions(CMap &) override;
+		virtual bool checkCollisions(CMap &, char);
+
+		virtual void move(CMap &, const CPlayer &);
+
+		void mvUp(CMap&);
+
+		void mvDown(CMap&);
+
+		void mvLeft(CMap&);
+
+		void mvRight(CMap&);
+
+		void decideMoveDirection(CMap&, const CPlayer &);
 
 	protected:
+		friend class CGame;
 };
