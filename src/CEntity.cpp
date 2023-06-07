@@ -28,24 +28,26 @@ void CEntity::decideMoveDirection(CMap &gameMap) {
 	}
 }
 
-bool CEntity::checkIfCollisions(CMap &gameMap) {
+bool CEntity::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> position) {
 	vector<vector<char>> map = gameMap.m_CharMap;
 
-	if (map[m_Position.first][m_Position.second] == 'T') {
-		if (m_Position == gameMap.m_TeleportIn)
-			m_Position = gameMap.m_TeleportOut;
+	if ( wallCollision(gameMap, position) )
+		return true;
+
+	if (map[position.first][position.second] == 'T') {
+		if (position == gameMap.m_TeleportIn)
+			position = gameMap.m_TeleportOut;
 		else
-			m_Position = gameMap.m_TeleportIn;
+			position = gameMap.m_TeleportIn;
     }
 
-	return ( wallCollision(gameMap, m_Position) || corridorCollision(map, m_Position) );
+	return ( corridorCollision(map, position) );
 }
 
+
 bool CEntity::wallCollision(const CMap &gameMap, pair<size_t, size_t> position) {
-	return position.second >= gameMap.m_Width -1 ||
-		   position.first >= gameMap.m_Height -1 ||
-		   position.second == SIZE_MAX ||
-		   position.first == SIZE_MAX  ||
+	return position.second >= gameMap.m_Width ||
+		   position.first >= gameMap.m_Height ||
 		   gameMap.m_CharMap[position.first][position.second] == '#';
 }
 

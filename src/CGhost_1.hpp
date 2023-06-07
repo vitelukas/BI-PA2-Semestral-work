@@ -10,8 +10,6 @@ class CGhost_1 : public CGhost {
 
     	void findShortestPath(CMap& , const CPlayer&, size_t &, size_t &);
 
-		void bfs(CMap &gameMap, const CPlayer &player, size_t &nextRow, size_t &nextCol);
-
 	protected:
 		friend class CGame;
 };

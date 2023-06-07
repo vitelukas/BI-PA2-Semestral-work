@@ -51,9 +51,7 @@ void CGhost_1::findShortestPath(CMap& gameMap, const CPlayer& player, size_t &ne
                 size_t x = current.second + neighbor.second;
                 size_t y = current.first + neighbor.first;
 
-                if (y < gameMap.m_Height && x < gameMap.m_Width && !visited[y][x] && gameMap.m_CharMap[y][x] != '#' &&
-                    !(gameMap.m_CharMap[y][x] == ' ' &&
-                      (gameMap.m_CharMap[y][x - 1] == '#' || gameMap.m_CharMap[y][x + 1] == '#'))) {
+                if ( !CEntity::checkIfCollisions(gameMap, {y, x}) && !visited[y][x] ) {
                     q.push({y, x});
                     visited[y][x] = true;
                     parent[y][x] = current;
@@ -92,4 +90,3 @@ void CGhost_1::findShortestPath(CMap& gameMap, const CPlayer& player, size_t &ne
 
     } while (!checkDirectionOK(futureDir));
 }
-    

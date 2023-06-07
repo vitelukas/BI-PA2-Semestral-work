@@ -3,11 +3,14 @@ using namespace std;
 using namespace std::chrono;
 
 
-CPlayer::CPlayer() {
+CPlayer::CPlayer() 
+	: CEntity()
+{
 	m_PrevDirection = 'n';
 	m_Score = 0;
 	m_Lifes = 3;
 	m_Character = 'p';
+	m_EntityLook = 4;
 
 	m_Speed = milliseconds(160);
 	m_ElapsedTime = milliseconds(0);
@@ -71,25 +74,25 @@ void CPlayer::decideMoveDirection(CMap &gameMap) {
 
 void CPlayer::mvUp(CMap &gameMap) {
 	--m_Position.first;
-	if (checkCollisions(gameMap))
+	if (checkIfCollisions(gameMap))
 		undoCollision(1, 1, gameMap);
 }
 
 void CPlayer::mvDown(CMap &gameMap) {
 	++m_Position.first;
-	if (checkCollisions(gameMap))
+	if (checkIfCollisions(gameMap))
 		undoCollision(1, 2, gameMap);
 }
 
 void CPlayer::mvLeft(CMap &gameMap) {
 	--m_Position.second;
-	if (checkCollisions(gameMap))
+	if (checkIfCollisions(gameMap))
 		undoCollision(2, 1, gameMap);
 }
 
 void CPlayer::mvRight(CMap &gameMap) {
 	++m_Position.second;
-	if (checkCollisions(gameMap))
+	if (checkIfCollisions(gameMap))
 		undoCollision(2, 2, gameMap);
 }
 
@@ -98,8 +101,11 @@ void CPlayer::collectCoin(CMap &gameMap) {
 	m_Score++;
 }
 
-bool CPlayer::checkCollisions(CMap &gameMap) {
+bool CPlayer::checkIfCollisions(CMap &gameMap) {
 	vector<vector<char>> map = gameMap.m_CharMap;
+
+	if (wallCollision(gameMap, m_Position))
+		return true;
 
 	switch (map[m_Position.first][m_Position.second]) {
         case '.':
@@ -118,7 +124,7 @@ bool CPlayer::checkCollisions(CMap &gameMap) {
             break;
     }
 
-	return ( wallCollision(gameMap) || corridorCollision(map) );
+	return ( corridorCollision(map, m_Position) );
 }
 
 //? value == 1 -> increment

@@ -19,7 +19,7 @@ class CEntity {
 
 		virtual void mvRight(CMap&) = 0;
 		
-		virtual bool checkIfCollisions(CMap &);
+		virtual bool checkIfCollisions(CMap &, pair<size_t, size_t>);
 
 		bool wallCollision(const CMap &, pair<size_t, size_t>);
 

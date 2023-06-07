@@ -26,8 +26,6 @@ class CMainMenu {
 		
 		void signLeaderBoard();
 
-		void end();
-
 	protected:	
 		int m_CursorPos, m_MenuItemStart, m_MenuItemEnd, m_xOffset, m_ChooseDiffPosition;
 		size_t m_Height, m_Width;

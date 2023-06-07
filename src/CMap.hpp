@@ -29,6 +29,8 @@ class CMap {
 		friend class CGame;
 		friend class CEntity;
 		friend class CPlayer;
+		friend class CGhost;
+		
 		friend class CGhost_1;
 		friend class CGhost_2;
 		friend class CGhost_3;
