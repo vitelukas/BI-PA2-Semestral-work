@@ -23,6 +23,10 @@ class CGhost_1 : public CEntity {
 
 		void decideMoveDirection(CMap&, const CPlayer &);
 
+
+    	void findShortestPath(CMap& , const CPlayer&);
+
+
 	protected:
 		friend class CGame;
 };

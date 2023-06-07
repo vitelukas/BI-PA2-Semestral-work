@@ -43,7 +43,7 @@ bool CEntity::checkDirectionOK(char futureDirection) {
 }
 
 void CEntity::formatTile(char &tile) {
-	if (tile == '&' || tile == '@' || tile == '0' || tile == 'T') {
+	if (tile == '&' || tile == '@' || tile == '0' || tile == 'T' || tile == 'O') {
 		tile = ' ';
 		return;
 	}
