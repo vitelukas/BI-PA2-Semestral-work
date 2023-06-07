@@ -8,25 +8,29 @@ class CEntity {
         CEntity();
 
 		virtual ~CEntity() {}
+
+		void decideMoveDirection(CMap &);
+
+		virtual void mvUp(CMap&) = 0;
+
+		virtual void mvDown(CMap&) = 0;
+
+		virtual void mvLeft(CMap&) = 0;
+
+		virtual void mvRight(CMap&) = 0;
 		
-		virtual void move(CMap &);
+		virtual bool checkIfCollisions(CMap &);
 
-		virtual bool checkCollisions(CMap &);
+		bool wallCollision(const CMap &, pair<size_t, size_t>);
 
-		bool wallCollision(CMap);
-
-		bool corridorCollision(vector<vector<char>>);
-
-		bool checkDirectionOK(char);
-
-		void formatTile(char&);
+		bool corridorCollision(vector<vector<char>>, pair<size_t, size_t>);
 
 	protected:
 		//		y		x
 		pair<size_t, size_t> m_Position;
 		std::chrono::milliseconds m_Speed;
     	std::chrono::steady_clock::time_point m_PreviousTime;
-		unordered_map<char, char> m_backDirections;
-		char m_Direction;
+		char m_Direction, m_Character; 
+		int m_EntityLook;
 		friend class CGame;
 };

@@ -7,31 +7,31 @@ class CPlayer : public CEntity{
 
 		virtual ~CPlayer() = default;
 
-		virtual void move(CMap &) override;
+		void move(CMap &);
 
-		void mvUp(CMap &);
+		virtual void decideMoveDirection(CMap &);
 
-		void mvDown(CMap &);
+		void mvUp(CMap &) override;
 
-		void mvLeft(CMap &);
+		void mvDown(CMap &) override;
 
-		void mvRight(CMap &);
+		void mvLeft(CMap &) override;
 
-		bool checkCollisions(CMap &) override;
+		void mvRight(CMap &) override;
+
+		virtual bool checkIfCollisions(CMap &);
 		
 		void collectCoin(CMap &);
 
 		void undoCollision(int , int, CMap &);
 
-		void decideMoveDirection(CMap &);
-	
 	protected:
 		char m_PrevDirection;
 		unsigned int m_Lifes;
 		unsigned int m_Score;
-		char m_Character;
     	std::chrono::milliseconds m_ElapsedTime;
 		friend class CGame;
+		friend class CGhost;
 		friend class CGhost_1;
 		friend class CGhost_2;
 		friend class CGhost_3;

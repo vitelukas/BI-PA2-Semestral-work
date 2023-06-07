@@ -2,60 +2,54 @@
 using namespace std;
 
 CEntity::CEntity()
-	: m_Position(0,0), m_Speed(0), m_Direction('n')
+	: m_Position(0,0), m_Speed(0), m_Character('x'), m_EntityLook(0)
 {
 	m_PreviousTime = std::chrono::steady_clock::now();
-	m_backDirections = {
-		{'w', 's'},
-        {'s', 'w'},
-        {'a', 'd'},
-        {'d', 'a'},
-	};
+	m_Direction = 'n';
 }
 
-void CEntity::move(CMap &) {
-	return;
+void CEntity::decideMoveDirection(CMap &gameMap) {
+	switch (m_Direction) {
+		case 'w':
+			mvUp(gameMap);
+			break;
+		case 's':
+			mvDown(gameMap);
+			break;
+		case 'a':
+			mvLeft(gameMap);
+			break;
+		case 'd':
+			mvRight(gameMap);
+			break;
+		default:
+			mvaddch(m_Position.first, m_Position.second, m_Character);
+			break;
+	}
 }
 
-bool CEntity::checkCollisions(CMap &gameMap) {
+bool CEntity::checkIfCollisions(CMap &gameMap) {
 	vector<vector<char>> map = gameMap.m_CharMap;
 
-	return ( wallCollision(gameMap) || corridorCollision(map) );
+	if (map[m_Position.first][m_Position.second] == 'T') {
+		if (m_Position == gameMap.m_TeleportIn)
+			m_Position = gameMap.m_TeleportOut;
+		else
+			m_Position = gameMap.m_TeleportIn;
+    }
+
+	return ( wallCollision(gameMap, m_Position) || corridorCollision(map, m_Position) );
 }
 
-bool CEntity::wallCollision(CMap gameMap) {
-	return gameMap.m_CharMap[m_Position.first][m_Position.second] == '#' ||
-		   m_Position.second >= gameMap.m_Width - 1 ||
-		   m_Position.first >= gameMap.m_Height - 1 ||
-		   m_Position.second < 0 ||
-		   m_Position.first < 0;
+bool CEntity::wallCollision(const CMap &gameMap, pair<size_t, size_t> position) {
+	return position.second >= gameMap.m_Width -1 ||
+		   position.first >= gameMap.m_Height -1 ||
+		   position.second == SIZE_MAX ||
+		   position.first == SIZE_MAX  ||
+		   gameMap.m_CharMap[position.first][position.second] == '#';
 }
 
-bool CEntity::corridorCollision(vector<vector<char>> map) {
-	return  map[m_Position.first][m_Position.second] == ' ' && 
-			(map[m_Position.first][m_Position.second - 1] == '#' ||  map[m_Position.first][m_Position.second + 1] == '#' );
-}
-
-bool CEntity::checkDirectionOK(char futureDirection) {
-	char bannedDirection = m_backDirections[m_Direction];
-
-	return !(bannedDirection == futureDirection);
-}
-
-void CEntity::formatTile(char &tile) {
-	if (tile == '&' || tile == '@' || tile == '0' || tile == 'T' || tile == 'O') {
-		tile = ' ';
-		return;
-	}
-
-	switch (tile) {
-	case '.':
-		attron(COLOR_PAIR(2));
-		break;
-	case 'B':
-    	attron(COLOR_PAIR(3));
-		break;
-	default:
-		break;
-	}
+bool CEntity::corridorCollision(vector<vector<char>> map, pair<size_t, size_t> position) {
+	return  map[position.first][position.second] == ' ' && 
+			(map[position.first][position.second - 1] == '#' ||  map[position.first][position.second + 1] == '#' );
 }

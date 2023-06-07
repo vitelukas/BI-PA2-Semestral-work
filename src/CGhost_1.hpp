@@ -1,31 +1,16 @@
-#include "CEntity.hpp"
-#include "CPlayer.hpp"
-#include <thread>
+#include "CGhost.hpp"
+#include <queue>
 #pragma once
 
-class CGhost_1 : public CEntity {
+class CGhost_1 : public CGhost {
 	public:
-        CGhost_1();
+		CGhost_1();
 
-		virtual ~CGhost_1() = default;
+		virtual void decideMoveDirection(CMap&, const CPlayer &) override;
 
-		virtual bool checkCollisions(CMap &, char);
+    	void findShortestPath(CMap& , const CPlayer&, size_t &, size_t &);
 
-		virtual void move(CMap &, const CPlayer &);
-
-		void mvUp(CMap&);
-
-		void mvDown(CMap&);
-
-		void mvLeft(CMap&);
-
-		void mvRight(CMap&);
-
-		void decideMoveDirection(CMap&, const CPlayer &);
-
-
-    	void findShortestPath(CMap& , const CPlayer&);
-
+		void bfs(CMap &gameMap, const CPlayer &player, size_t &nextRow, size_t &nextCol);
 
 	protected:
 		friend class CGame;

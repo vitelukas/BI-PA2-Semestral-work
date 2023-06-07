@@ -1,32 +1,11 @@
 #include "CGhost_3.hpp"
 using namespace std;
-using namespace std::chrono;
 
-CGhost_3::CGhost_3() {
-	m_Position = {0 ,0};
-}
-
-void CGhost_3::move(CMap& gameMap, const CPlayer& player) {
-	auto currentTime = steady_clock::now();
-    auto elapsedTime = duration_cast<milliseconds>(currentTime - m_PreviousTime).count();
-
-    if (elapsedTime < m_Speed.count() + 200) {
-        return;
-	}
-
-	srand(time(0));
-
-	char tile = gameMap.m_CharMap[m_Position.first][m_Position.second];
-	formatTile(tile);
-    mvaddch(m_Position.first, m_Position.second, tile);
-
-    decideMoveDirection(gameMap, player);
-
-    attron(COLOR_PAIR(6));
-    mvaddch(m_Position.first, m_Position.second, '0');
-    attroff(COLOR_PAIR(6));
-
-	m_PreviousTime = currentTime; // Update the timer
+CGhost_3::CGhost_3() 
+	: CGhost()
+{
+    m_Character = '0';
+    m_EntityLook = 7;
 }
 
 void CGhost_3::decideMoveDirection(CMap& gameMap, const CPlayer & player) {
@@ -42,7 +21,7 @@ void CGhost_3::decideMoveDirection(CMap& gameMap, const CPlayer & player) {
 
 void CGhost_3::mvUp(CMap& gameMap) {
     --m_Position.first;
-    if (checkCollisions(gameMap, 'w')) {
+    if (checkIfCollisions(gameMap, 'w')) {
         ++m_Position.first;
 		chooseRandomMove(gameMap);
 	} else {
@@ -52,7 +31,7 @@ void CGhost_3::mvUp(CMap& gameMap) {
 
 void CGhost_3::mvDown(CMap& gameMap) {
     ++m_Position.first;
-    if (checkCollisions(gameMap, 's')) {
+    if (checkIfCollisions(gameMap, 's')) {
         --m_Position.first;
 		chooseRandomMove(gameMap);
 	} else {
@@ -62,7 +41,7 @@ void CGhost_3::mvDown(CMap& gameMap) {
 
 void CGhost_3::mvLeft(CMap& gameMap) {
     --m_Position.second;
-    if (checkCollisions(gameMap, 'a')) {
+    if (checkIfCollisions(gameMap, 'a')) {
         ++m_Position.second;
 		chooseRandomMove(gameMap);
 	} else {
@@ -72,7 +51,7 @@ void CGhost_3::mvLeft(CMap& gameMap) {
 
 void CGhost_3::mvRight(CMap& gameMap) {
     ++m_Position.second;
-    if (checkCollisions(gameMap, 'd')) {
+    if (checkIfCollisions(gameMap, 'd')) {
         --m_Position.second;
 		chooseRandomMove(gameMap);
 	} else {
@@ -100,17 +79,4 @@ void CGhost_3::chooseRandomMove(CMap& gameMap) {
 	default:
 		break;
 	}
-}
-
-bool CGhost_3::checkCollisions(CMap& gameMap, char futureDirection) {
-    vector<vector<char>> map = gameMap.m_CharMap;
-
-	if (map[m_Position.first][m_Position.second] == 'T') {
-		if (m_Position == gameMap.m_TeleportIn)
-			m_Position = gameMap.m_TeleportOut;
-		else
-			m_Position = gameMap.m_TeleportIn;
-    }
-
-	return ( wallCollision(gameMap) || corridorCollision(map) || !checkDirectionOK(futureDirection) );
 }

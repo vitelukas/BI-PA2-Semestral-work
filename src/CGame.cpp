@@ -16,6 +16,8 @@ void CGame::run() {
 
         m_Ghost_1.move(m_Map, m_Player);
 
+        m_Ghost_2.move(m_Map, m_Player);
+
         m_Ghost_3.move(m_Map, m_Player);
     }
 
@@ -24,7 +26,7 @@ void CGame::run() {
 
 void CGame::initializeGame() {
     clear();   
-    m_Map.loadMap("examples/main_map.txt");
+    m_Map.loadMap("examples/maps/main_map.txt");
 
     for (size_t y = 0; y < m_Map.m_Height; y++) {
         for (size_t x = 0; x < m_Map.m_CharMap[y].size(); x++) {
@@ -65,12 +67,15 @@ void CGame::setEntities(char entity, size_t y, size_t x) {
             break;
         case '&':
             m_Ghost_1.m_Position = {y, x};
+            m_Ghost_1.m_Character = m_Map.m_AsciiToSymbolMap['&'];
             break;
         case '@':
             m_Ghost_2.m_Position = {y, x};
+            m_Ghost_2.m_Character = m_Map.m_AsciiToSymbolMap['@'];
             break;
         case '0':
             m_Ghost_3.m_Position = {y, x};
+            m_Ghost_3.m_Character = m_Map.m_AsciiToSymbolMap['0'];
             break;
         case '.':
             ++m_ScoreToWin;

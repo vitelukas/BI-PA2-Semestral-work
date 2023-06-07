@@ -1,15 +1,11 @@
-#include "CEntity.hpp"
+#include "CGhost.hpp"
 #pragma once
 
-class CGhost_2 : public CEntity{
+class CGhost_2 : public CGhost {
 	public:
-        CGhost_2();
+		CGhost_2();
+		
+		virtual void decideMoveDirection(CMap&, const CPlayer &) override;
 
-		virtual ~CGhost_2() = default;
-
-		virtual void move(CMap &) override;
-
-		virtual bool checkCollisions(CMap &) override;
-	
 	protected:
 };
