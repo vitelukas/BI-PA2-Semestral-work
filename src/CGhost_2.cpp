@@ -22,8 +22,12 @@ void CGhost_2::decideMoveDirection(CMap& gameMap, const CPlayer& player) {
         mvLeft(gameMap);
     else if (nextCol > m_Position.second)
         mvRight(gameMap);
-    else
+    else {
         CEntity::decideMoveDirection(gameMap);
+		//todo pokud pozice zustane stejna, proved random pohyb
+		//todo - if the position remains the same, make a random move
+	}
+		
 }
 
 // Perform BFS to find the shortest path to the player

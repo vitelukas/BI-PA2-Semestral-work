@@ -25,8 +25,7 @@ void CGhost::move(CMap& gameMap, const CPlayer& player) {
 	auto currentTime = steady_clock::now();
     auto elapsedTime = duration_cast<milliseconds>(currentTime - m_PreviousTime).count();
 
-    if (elapsedTime < m_Speed.count() + m_GhostSlower
-		|| m_Position == player.m_Position) {
+    if (elapsedTime < m_Speed.count() + m_GhostSlower) {
         return;
 	}
 
