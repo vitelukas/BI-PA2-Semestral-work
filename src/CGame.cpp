@@ -82,6 +82,9 @@ void CGame::setEntities(char entity, size_t y, size_t x) {
             ++m_ScoreToWin;
             m_Map.m_CoinCharr = m_Map.m_AsciiToSymbolMap['.'];
             break;
+        case 'B':
+            ++m_ScoreToWin;
+            break;
         case 'T':
             if (m_Map.m_TeleportIn == make_pair(SIZE_MAX, SIZE_MAX))
                 m_Map.m_TeleportIn = make_pair(y, x);

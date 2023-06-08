@@ -28,8 +28,9 @@ class CPlayer : public CEntity{
 
 	protected:
 		char m_PrevDirection;
+		bool m_IsBerserk;
 		unsigned int m_Lifes, m_Score;
-    	std::chrono::milliseconds m_ElapsedTime;
+    	std::chrono::milliseconds m_ElapsedTime, m_BerserkTime;
 		friend class CGame;
 		friend class CGhost;
 		friend class CGhost_1;

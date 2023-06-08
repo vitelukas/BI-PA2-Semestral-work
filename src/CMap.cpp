@@ -23,6 +23,7 @@ CMap::CMap()
 	init_pair(5, COLOR_BLACK, COLOR_RED);
 	init_pair(6, COLOR_BLACK, COLOR_CYAN);
 	init_pair(7, COLOR_BLACK, COLOR_WHITE);
+	init_pair(8, COLOR_BLACK, COLOR_MAGENTA);
 }
 
 void CMap::loadMap(const string &fileName) {

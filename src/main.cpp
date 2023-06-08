@@ -24,6 +24,7 @@ int main() {
 		again = mainMenu.run();
 	}
 
+	delwin(stdscr);
 	endwin();
 	return 0;
 }

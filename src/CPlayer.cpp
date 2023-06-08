@@ -11,7 +11,9 @@ CPlayer::CPlayer()
 	m_Lifes = 3;
 	m_Character = 'p';
 	m_EntityLook = 4;
+	m_IsBerserk = false;
 
+	m_BerserkTime = milliseconds(5000);
 	m_Speed = milliseconds(160);
 	m_ElapsedTime = milliseconds(0);
     m_PreviousTime = steady_clock::now(); // Initialize m_PreviousTime to the current time point
@@ -25,7 +27,7 @@ void CPlayer::move(CMap & gameMap) {
 	prevPosition = m_Position;
 
 	timeout(0);
-	char userInput = tolower(getch());
+	int userInput = tolower(getch());
 
 	if (userInput != ERR ) {
 		m_PrevDirection = m_Direction;
@@ -67,7 +69,6 @@ void CPlayer::decideMoveDirection(CMap &gameMap) {
 			mvRight(gameMap);
 			break;
 		default:
-			mvaddch(m_Position.first, m_Position.second, 'O');
 			break;
 	}
 }
@@ -112,7 +113,8 @@ bool CPlayer::checkIfCollisions(CMap &gameMap) {
             collectCoin(gameMap);
             break;
         case 'B':
-            // goBerserk();
+            collectCoin(gameMap);
+            m_IsBerserk = true;
             break;
         case 'T':
             if (m_Position == gameMap.m_TeleportIn)
