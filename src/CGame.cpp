@@ -45,7 +45,7 @@ void CGame::initializeGame() {
 void CGame::update() {
     reloadMap();
 
-    handleGhostCollision();
+    handleCollisions();
 
     mvprintw(m_Map.m_Height + 1, 0, "Score: %d", m_Player.m_Score);
     mvprintw(m_Map.m_Height + 2, 0, "Lifes: %d", m_Player.m_Lifes);
@@ -94,6 +94,21 @@ void CGame::setEntities(char entity, size_t y, size_t x) {
         default:
             break;
     }
+}
+
+void CGame::handleCollisions() {
+
+    if ( !m_Player.m_IsBerserk ) {
+        handleGhostCollision();
+    } else {
+        goBerserk();
+
+        m_Player.m_IsBerserk = false;
+        m_Ghost_1.m_EntityLook = 5;
+        m_Ghost_2.m_EntityLook = 6;
+        m_Ghost_3.m_EntityLook = 7;
+    }
+
 }
 
 void CGame::handleGhostCollision() {
@@ -147,4 +162,45 @@ void CGame::setEntityAfterCollision() {
         entity->formatTile(tile);
         mvaddch(y, x, tile);   
     }
+}
+
+void CGame::goBerserk() {
+    auto y = m_Map.m_Height + 2;
+    auto x = m_Map.m_Width - 20;
+    attron(A_REVERSE);
+    mvprintw(y, x, "Berserk mode active");
+    attroff(A_REVERSE);
+    reloadMap();
+
+    auto prevTime    = m_Player.m_PreviousTime = steady_clock::now();
+    auto curTime     = m_Player.m_CurrentTime  = steady_clock::now();
+    auto elapsedTime = duration_cast<milliseconds>(curTime - prevTime);
+
+    // Swap the ghosts direction to go back
+    // and set different color for ghosts, so that the player can see he can eat them
+    const vector<CGhost*> ghosts = {&m_Ghost_1, &m_Ghost_2, &m_Ghost_3};
+    for (auto ghost : ghosts) {
+        ghost->m_EntityLook = 8;
+        int numDir = ghost->m_DirectionsTable[ghost->m_Direction];
+        ghost->m_Direction = ghost->m_BackDirections[numDir];
+    }
+
+    while ( elapsedTime < m_Player.m_BerserkTime ) {
+        // Update but in berserk mode
+        reloadMap();
+
+        m_Player.move(m_Map);
+
+        //todo ensure that the ghost will move in the random direction if there is a collision
+        // Move ghosts in random directions;
+        m_Ghost_1.move(m_Map, m_Player);
+        m_Ghost_2.move(m_Map, m_Player);
+        m_Ghost_3.move(m_Map, m_Player);
+
+        curTime = steady_clock::now();
+        elapsedTime = duration_cast<milliseconds>(curTime - prevTime);
+    }
+
+    move(y, x);
+    clrtoeol(); // Clear the berserk active text
 }

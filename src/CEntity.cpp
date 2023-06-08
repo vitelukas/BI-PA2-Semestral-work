@@ -4,7 +4,7 @@ using namespace std;
 CEntity::CEntity()
 	: m_Position(0,0), m_InitialPosition(0,0), m_Speed(0), m_Character('x'), m_EntityLook(0)
 {
-	m_PreviousTime = std::chrono::steady_clock::now();
+	m_CurrentTime = m_PreviousTime = std::chrono::steady_clock::now();
 	m_Direction = 'n';
 }
 

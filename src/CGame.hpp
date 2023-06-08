@@ -19,6 +19,8 @@ class CGame {
 
 		void update();
 
+		void handleCollisions();
+
 		void handleGhostCollision();
 
 		bool checkGhostCollision();
@@ -28,6 +30,8 @@ class CGame {
 		void reloadMap();
 
 		void setEntities(char entity, size_t x, size_t y);
+
+		void goBerserk();
 
 	protected:
 		bool m_GameIsDone;

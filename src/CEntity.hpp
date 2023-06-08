@@ -31,7 +31,7 @@ class CEntity {
 		//		y		x
 		pair<size_t, size_t> m_Position, m_InitialPosition;
 		std::chrono::milliseconds m_Speed;
-    	std::chrono::steady_clock::time_point m_PreviousTime;
+    	std::chrono::steady_clock::time_point m_CurrentTime, m_PreviousTime;
 		char m_Direction, m_Character; 
 		int m_EntityLook;
 		friend class CGame;

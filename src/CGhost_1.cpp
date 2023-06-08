@@ -12,6 +12,7 @@ CGhost_1::CGhost_1()
 void CGhost_1::decideMoveDirection(CMap& gameMap, const CPlayer& player) {
 	size_t nextRow, nextCol;
 
+    // Perform BFS to find the shortest path towards the player
 	findShortestPath(gameMap , player, nextRow, nextCol);
 
     // Determine the next move based on the algorithm's found position
@@ -27,7 +28,6 @@ void CGhost_1::decideMoveDirection(CMap& gameMap, const CPlayer& player) {
         CEntity::decideMoveDirection(gameMap);
 }
 
-// Perform BFS to find the shortest path to the player
 void CGhost_1::findShortestPath(CMap& gameMap, const CPlayer& player, size_t &nextRow, size_t &nextCol) {
     vector<vector<bool>> visited(gameMap.m_Height, vector<bool>(gameMap.m_Width, false));
     vector<vector<pair<size_t, size_t>>> parent(gameMap.m_Height, vector<pair<size_t, size_t>>(gameMap.m_Width, make_pair(SIZE_MAX, SIZE_MAX)));

@@ -16,8 +16,6 @@ class CGhost_3 : public CGhost {
 
 		virtual void mvRight(CMap&) override;
 
-		void chooseRandomMove(CMap&);
-
 	protected:
 		friend class CGame;
 };

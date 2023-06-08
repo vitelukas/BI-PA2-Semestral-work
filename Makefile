@@ -32,7 +32,7 @@ clean:
 	rm -f $(SRCDIR)/*.o Pacman *~
 	> ./examples/leaderboard/leaderboard.txt
 
-# Rule to generate dependency information for the source files
+# Rule to generate dependency informations flie (using the -MM flag) for the source files
 deps:
 	$(CXX) -MM $(SRCDIR)/*.cpp > Makefile.d
 

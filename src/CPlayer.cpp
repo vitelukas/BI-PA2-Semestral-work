@@ -13,15 +13,14 @@ CPlayer::CPlayer()
 	m_EntityLook = 4;
 	m_IsBerserk = false;
 
-	m_BerserkTime = milliseconds(5000);
+	m_BerserkTime = milliseconds(6000);
 	m_Speed = milliseconds(160);
-	m_ElapsedTime = milliseconds(0);
     m_PreviousTime = steady_clock::now(); // Initialize m_PreviousTime to the current time point
 }
 
 void CPlayer::move(CMap & gameMap) {
-	auto currentTime = steady_clock::now();
-    m_ElapsedTime = duration_cast<milliseconds>(currentTime - m_PreviousTime);
+	m_CurrentTime = steady_clock::now();
+    auto elapsedTime = duration_cast<milliseconds>(m_CurrentTime - m_PreviousTime);
 
 	pair<size_t, size_t> prevPosition;
 	prevPosition = m_Position;
@@ -34,7 +33,7 @@ void CPlayer::move(CMap & gameMap) {
 		m_Direction = userInput;
 	}
 
-	if (m_ElapsedTime >= m_Speed) {
+	if (elapsedTime >= m_Speed) {
 		mvaddch(m_Position.first, m_Position.second, ' ');
 		
 		decideMoveDirection(gameMap);
@@ -45,7 +44,7 @@ void CPlayer::move(CMap & gameMap) {
 		}
 
 		m_PrevDirection = m_Direction;
-        m_PreviousTime = currentTime;
+        m_PreviousTime = m_CurrentTime;
     }
 	
 	// TODO - make attr variable for player character so that it will be formated automatically

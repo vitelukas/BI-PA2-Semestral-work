@@ -28,8 +28,11 @@ class CGhost : public CEntity {
 
 		char determineDirection(pair<size_t, size_t>);
 
+		void chooseRandomMove(CMap&);
+
 	protected:
-		unordered_map<int, char> m_BackDirections;
+		unordered_map<char, int> m_BackDirections;
 		unordered_map<int, char> m_DirectionsTable;
 		int m_GhostSlower;
+		friend class CGame;
 };

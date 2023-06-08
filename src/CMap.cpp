@@ -16,14 +16,14 @@ CMap::CMap()
 	};
 
 	// init_color(COLOR_BLUE, 000, 000, 600 );
-	init_pair(1, COLOR_BLUE, COLOR_BLUE);
-	init_pair(2, COLOR_YELLOW, -1); // -1 == use the default color for background
-	init_pair(3, COLOR_RED, -1);
-	init_pair(4, COLOR_BLACK, COLOR_YELLOW);
-	init_pair(5, COLOR_BLACK, COLOR_RED);
-	init_pair(6, COLOR_BLACK, COLOR_CYAN);
-	init_pair(7, COLOR_BLACK, COLOR_WHITE);
-	init_pair(8, COLOR_BLACK, COLOR_MAGENTA);
+	init_pair(1, COLOR_BLUE, COLOR_BLUE);	// wall default color
+	init_pair(2, COLOR_YELLOW, -1); 		// coinf default color 		(-1 == use the default color for background)
+	init_pair(3, COLOR_RED, -1);			// Cherry default color
+	init_pair(4, COLOR_BLACK, COLOR_YELLOW);	// Player default color
+	init_pair(5, COLOR_BLACK, COLOR_RED);		// Ghost_1 default color
+	init_pair(6, COLOR_BLACK, COLOR_CYAN);		// Ghost_2 default color
+	init_pair(7, COLOR_BLACK, COLOR_WHITE);		// Ghost_3 default color
+	init_pair(8, COLOR_BLACK, COLOR_GREEN);		// berserk mode ghost default color
 }
 
 void CMap::loadMap(const string &fileName) {
