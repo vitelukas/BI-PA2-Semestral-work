@@ -1,4 +1,5 @@
 #include "CGhost.hpp"
+
 #pragma once
 
 class CGhost_3 : public CGhost {

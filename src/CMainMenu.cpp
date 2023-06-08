@@ -6,6 +6,7 @@ CMainMenu::CMainMenu() {
     m_CursorPos = 10;
     m_MenuItemStart = 10;
     m_ChooseDiffPosition = m_MenuItemStart + 1;
+    m_ShowLeaderboard = m_MenuItemStart + 2;
     m_MenuItemEnd = m_MenuItemStart + 3;
 	getmaxyx(stdscr, m_Height, m_Width); 
     m_xOffset = (getmaxx(stdscr) / 2) - 3;
@@ -24,8 +25,7 @@ CMainMenu::~CMainMenu() {
     endwin();
 }
 
-int CMainMenu::run() {
-    
+int CMainMenu::run() {    
     char getInput;
     while(true){
         update();
@@ -52,15 +52,18 @@ int CMainMenu::run() {
         // Choose what action should be performed based on the cursor position
         if (getInput == '\n') {
             if ( m_CursorPos == m_MenuItemStart ) {
-                //todo Choose difficulty
                 m_Game.run();
-                signLeaderBoard();
+
+                m_LeaderBoard.makeEntry(m_Game.m_Player.m_Score);
+
                 return 1;
-            }
-            if ( m_CursorPos == m_ChooseDiffPosition) {
+
+            } else if ( m_CursorPos == m_ChooseDiffPosition) {
+                //todo Choose difficulty
                 chooseDifficulty();
-            }
-            else if( m_CursorPos == m_MenuItemEnd ) {
+            } else if ( m_CursorPos == m_ShowLeaderboard) {
+                m_LeaderBoard.showLeaderboard();
+            } else if( m_CursorPos == m_MenuItemEnd ) {
                 return 0;
             }
         }
@@ -86,7 +89,7 @@ void:: CMainMenu::prnt() {
 
     mvprintw(y++, x, "new game\n");
     mvprintw(y++, x, "choose difficulty\n");
-    mvprintw(y++, x, "show leader board\n");
+    mvprintw(y++, x, "show leaderboard\n");
     mvprintw(y++, x, "end\n");
 
     move(m_Height - 8, 0);
@@ -95,9 +98,5 @@ void:: CMainMenu::prnt() {
 }
 
 void CMainMenu::chooseDifficulty() {
-    return;
-}
-
-void CMainMenu::signLeaderBoard() {
     return;
 }

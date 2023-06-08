@@ -17,7 +17,8 @@ int main() {
     }
 
 	int again = 1;
-	while (again) {		
+	while (again) {
+		timeout(-1);		
 		CMainMenu mainMenu;
 
 		again = mainMenu.run();

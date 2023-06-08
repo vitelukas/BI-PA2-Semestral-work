@@ -1,5 +1,6 @@
 #include "CGhost.hpp"
 #include <queue>
+
 #pragma once
 
 class CGhost_2 : public CGhost {

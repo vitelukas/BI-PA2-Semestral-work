@@ -31,4 +31,5 @@ class CGame {
 		CGhost_1 m_Ghost_1;
 		CGhost_2 m_Ghost_2;
 		CGhost_3 m_Ghost_3;
+		friend class CMainMenu;
 };

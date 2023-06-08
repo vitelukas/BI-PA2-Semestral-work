@@ -10,7 +10,7 @@ CGame::CGame() {
 void CGame::run() {
     initializeGame();
 
-    while (!m_GameIsDone) {
+    while ( !m_GameIsDone ) {
         update();
         m_Player.move(m_Map);
 

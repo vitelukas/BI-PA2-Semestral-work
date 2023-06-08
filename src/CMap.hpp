@@ -6,6 +6,7 @@
 #include <ncurses.h>
 #include <climits>
 #include <stdexcept>
+
 #pragma once
 
 using namespace std;
@@ -14,7 +15,7 @@ class CMap {
 	public:
 		CMap();
 
-		void loadMap(const string & );
+		void loadMap(const std::string & );
 
 		void transformMap(char, size_t, size_t);
 

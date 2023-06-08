@@ -1,4 +1,5 @@
 #include "CEntity.hpp"
+
 #pragma once
 
 class CPlayer : public CEntity{
@@ -27,12 +28,12 @@ class CPlayer : public CEntity{
 
 	protected:
 		char m_PrevDirection;
-		unsigned int m_Lifes;
-		unsigned int m_Score;
+		unsigned int m_Lifes, m_Score;
     	std::chrono::milliseconds m_ElapsedTime;
 		friend class CGame;
 		friend class CGhost;
 		friend class CGhost_1;
 		friend class CGhost_2;
 		friend class CGhost_3;
+		friend class CMainMenu;
 };

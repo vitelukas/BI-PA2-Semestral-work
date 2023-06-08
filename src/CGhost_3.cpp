@@ -61,9 +61,9 @@ void CGhost_3::mvRight(CMap& gameMap) {
 
 void CGhost_3::chooseRandomMove(CMap& gameMap) {
 	// Generate a pseudo random direction based on the current time
-	int direction = rand() % 4 + 1;
+	int randomDirection = rand() % 4 + 1;
 
-	switch (direction) {
+	switch (randomDirection) {
 	case 1:
 		mvUp(gameMap);
 		break;

@@ -23,13 +23,11 @@ class CMainMenu {
 		void update();
 
 		void chooseDifficulty();
-		
-		void signLeaderBoard();
 
 	protected:	
-		int m_CursorPos, m_MenuItemStart, m_MenuItemEnd, m_xOffset, m_ChooseDiffPosition;
+		int m_CursorPos, m_MenuItemStart, m_MenuItemEnd, m_xOffset, m_ChooseDiffPosition, m_ShowLeaderboard;
 		size_t m_Height, m_Width;
-		CLeaderBoard m_LeaderBoard;
-		CGameMode m_GameMode;
 		CGame m_Game;
+		CGameMode m_GameMode;
+		CLeaderBoard m_LeaderBoard;
 };

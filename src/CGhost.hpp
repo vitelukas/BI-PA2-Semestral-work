@@ -1,7 +1,7 @@
 #include "CEntity.hpp"
 #include "CPlayer.hpp"
-#include <thread>
 #include <ctime>
+
 #pragma once
 
 class CGhost : public CEntity {
