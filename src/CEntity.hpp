@@ -25,9 +25,11 @@ class CEntity {
 
 		bool corridorCollision(vector<vector<char>>, pair<size_t, size_t>);
 
+		void formatTile(char&);
+
 	protected:
 		//		y		x
-		pair<size_t, size_t> m_Position;
+		pair<size_t, size_t> m_Position, m_InitialPosition;
 		std::chrono::milliseconds m_Speed;
     	std::chrono::steady_clock::time_point m_PreviousTime;
 		char m_Direction, m_Character; 

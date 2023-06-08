@@ -104,24 +104,6 @@ bool CGhost::checkDirectionOK(char futureDirection) {
 	return !(bannedDirection == futureDirection);
 }
 
-void CGhost::formatTile(char &tile) {
-	if (tile == '&' || tile == '@' || tile == '0' || tile == 'T' || tile == 'O') {
-		tile = ' ';
-		return;
-	}
-
-	switch (tile) {
-	case '.':
-		attron(COLOR_PAIR(2));
-		break;
-	case 'B':
-    	attron(COLOR_PAIR(3));
-		break;
-	default:
-		break;
-	}
-}
-
 char CGhost::determineDirection(pair<size_t, size_t> futurePos) {
     if (futurePos.first < m_Position.first) {
         // Up

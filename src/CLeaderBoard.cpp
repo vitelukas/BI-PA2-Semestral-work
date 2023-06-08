@@ -52,17 +52,14 @@ string CLeaderBoard::getPlayerName() {
 
     char ch = 'n';
     string playerName;
-    size_t x, y, xOffset, maxY;
-	getmaxyx(stdscr, maxY, xOffset);
-    xOffset = (xOffset/2) - 10;
+    size_t x, y, xOffset;
+	xOffset = (getmaxx(stdscr)/2) - 10;
     x = xOffset + 7;
     y = 6;
 
     attron(A_UNDERLINE | A_STANDOUT);
     mvprintw(4, xOffset, "PLEASE ENTER YOUR NAME");
     attroff(A_UNDERLINE | A_STANDOUT);
-
-    mvprintw(maxY - 2, 1, "Press any key to exit.");
 
 	move(y, x);
 	curs_set(1);
@@ -102,12 +99,15 @@ void CLeaderBoard::showLeaderboard() {
 	}
 	
 	string line;
-	size_t x, y;
+	size_t x, y, maxY;
 	y = 3;
 	x = (getmaxx(stdscr) / 2) - 3;
+	maxY = getmaxy(stdscr);
 	attron(A_UNDERLINE | A_STANDOUT);
 	mvprintw(1, x, "LEADERBOARD");
 	attroff(A_UNDERLINE | A_STANDOUT);
+
+	mvprintw(maxY - 2, 1, "Press any key to exit.");
 
 	while (getline(sourceFile, line)) {
 		mvprintw(y, x, line.c_str());
@@ -119,12 +119,3 @@ void CLeaderBoard::showLeaderboard() {
 	refresh();
 	getch();
 }
-
-
-
-// ulozit pomoci getch() user input a prilepit ho na konec string promenny
-// po user input vypsat string promennout na obrazovku
-// pokud user zmackne backspace, smazat ze stringu posledni char --> str.pop_back();
-// kdyz da user enter tak ulozit do leaderboard souboru
-
-// do make clean pridat i vymazani leaderboard

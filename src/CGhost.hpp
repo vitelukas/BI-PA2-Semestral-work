@@ -26,8 +26,6 @@ class CGhost : public CEntity {
 
 		bool checkDirectionOK(char);
 
-		void formatTile(char&);
-
 		char determineDirection(pair<size_t, size_t>);
 
 	protected:

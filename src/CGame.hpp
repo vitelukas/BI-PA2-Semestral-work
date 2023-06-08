@@ -19,6 +19,12 @@ class CGame {
 
 		void update();
 
+		void handleGhostCollision();
+
+		bool checkGhostCollision();
+
+		void setEntityAfterCollision();
+
 		void reloadMap();
 
 		void setEntities(char entity, size_t x, size_t y);

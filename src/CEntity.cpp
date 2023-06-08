@@ -2,7 +2,7 @@
 using namespace std;
 
 CEntity::CEntity()
-	: m_Position(0,0), m_Speed(0), m_Character('x'), m_EntityLook(0)
+	: m_Position(0,0), m_InitialPosition(0,0), m_Speed(0), m_Character('x'), m_EntityLook(0)
 {
 	m_PreviousTime = std::chrono::steady_clock::now();
 	m_Direction = 'n';
@@ -54,4 +54,22 @@ bool CEntity::wallCollision(const CMap &gameMap, pair<size_t, size_t> position) 
 bool CEntity::corridorCollision(vector<vector<char>> map, pair<size_t, size_t> position) {
 	return  map[position.first][position.second] == ' ' && 
 			(map[position.first][position.second - 1] == '#' ||  map[position.first][position.second + 1] == '#' );
+}
+
+void CEntity::formatTile(char &tile) {
+	if (tile == '&' || tile == '@' || tile == '0' || tile == 'T' || tile == 'O') {
+		tile = ' ';
+		return;
+	}
+
+	switch (tile) {
+	case '.':
+		attron(COLOR_PAIR(2));
+		break;
+	case 'B':
+    	attron(COLOR_PAIR(3));
+		break;
+	default:
+		break;
+	}
 }
