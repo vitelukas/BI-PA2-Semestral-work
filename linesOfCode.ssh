@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Specify the root directory of your project
+PROJECT_DIR="./"
+
+# Define the file extensions to consider (modify as per your project's language)
+FILE_EXTENSIONS=".cpp .hpp .h .c"
+
+# Function to count lines of code in a file
+count_lines() {
+    local file="$1"
+    local lines=$(wc -l < "$file")
+    echo "$lines"
+}
+
+# Function to recursively count lines of code in a directory
+count_lines_recursive() {
+    local directory="$1"
+    local total_lines=0
+
+    for file in "$directory"/*; do
+        if [ -f "$file" ]; then
+            local ext="${file##*.}"
+            if [[ $FILE_EXTENSIONS == *"$ext"* ]]; then
+                local lines=$(count_lines "$file")
+                total_lines=$((total_lines + lines))
+            fi
+        elif [ -d "$file" ]; then
+            local lines=$(count_lines_recursive "$file")
+            total_lines=$((total_lines + lines))
+        fi
+    done
+
+    echo "$total_lines"
+}
+
+# Count lines of code in the project directory
+total_lines=$(count_lines_recursive "$PROJECT_DIR")
+
+echo "Total lines of code: $total_lines"
