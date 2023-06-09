@@ -10,7 +10,7 @@ class CGhost : public CEntity {
 
 		virtual void move(CMap &, const CPlayer &);
 
-		virtual void decideMoveDirection(CMap&, const CPlayer &) = 0;
+		virtual void decideMoveDirection(CMap&, const CEntity &) override;
 
 		virtual void mvUp(CMap&)  override;
 
@@ -20,9 +20,7 @@ class CGhost : public CEntity {
 
 		virtual void mvRight(CMap&) override;
 
-		virtual bool checkIfCollisions(CMap &, char);
-
-		virtual bool checkIfCollisions(CMap&, char, pair<size_t, size_t>);
+		virtual bool checkIfCollisions(CMap &, pair<size_t, size_t>s) override;
 
 		bool checkDirectionOK(char);
 

@@ -10,21 +10,19 @@ class CPlayer : public CEntity{
 
 		void move(CMap &);
 
-		virtual void decideMoveDirection(CMap &);
+		virtual void decideMoveDirection(CMap&, const CEntity &) override;
 
-		void mvUp(CMap &) override;
+		virtual void mvUp(CMap &) override;
 
-		void mvDown(CMap &) override;
+		virtual void mvDown(CMap &) override;
 
-		void mvLeft(CMap &) override;
+		virtual void mvLeft(CMap &) override;
 
-		void mvRight(CMap &) override;
+		virtual void mvRight(CMap &) override;
 
-		virtual bool checkIfCollisions(CMap &);
+		virtual bool checkIfCollisions(CMap &, pair<size_t, size_t>) override;
 		
 		void collectCoin(CMap &);
-
-		void undoCollision(int , int, CMap &);
 
 	protected:
 		char m_PrevDirection;

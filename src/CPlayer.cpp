@@ -36,11 +36,11 @@ void CPlayer::move(CMap & gameMap) {
 	if (elapsedTime >= m_Speed) {
 		mvaddch(m_Position.first, m_Position.second, ' ');
 		
-		decideMoveDirection(gameMap);
+		decideMoveDirection(gameMap, *this);
 
 		if (m_Position == prevPosition) {
 			m_Direction = m_PrevDirection;
-			decideMoveDirection(gameMap);
+			decideMoveDirection(gameMap, *this);
 		}
 
 		m_PrevDirection = m_Direction;
@@ -53,7 +53,7 @@ void CPlayer::move(CMap & gameMap) {
 	attroff(COLOR_PAIR(4));
 }
 
-void CPlayer::decideMoveDirection(CMap &gameMap) {
+void CPlayer::decideMoveDirection(CMap &gameMap, const CEntity &player) {
 	switch (m_Direction) {
 		case 'w':
 			mvUp(gameMap);
@@ -73,27 +73,27 @@ void CPlayer::decideMoveDirection(CMap &gameMap) {
 }
 
 void CPlayer::mvUp(CMap &gameMap) {
-	--m_Position.first;
-	if (checkIfCollisions(gameMap))
-		undoCollision(1, 1, gameMap);
+	pair<size_t, size_t> futurePosition = {m_Position.first-1, m_Position.second};
+	if ( !checkIfCollisions(gameMap, futurePosition) )
+		--m_Position.first;
 }
 
 void CPlayer::mvDown(CMap &gameMap) {
-	++m_Position.first;
-	if (checkIfCollisions(gameMap))
-		undoCollision(1, 2, gameMap);
+	pair<size_t, size_t> futurePosition = {m_Position.first+1, m_Position.second};
+	if ( !checkIfCollisions(gameMap, futurePosition) )
+		++m_Position.first;
 }
 
 void CPlayer::mvLeft(CMap &gameMap) {
-	--m_Position.second;
-	if (checkIfCollisions(gameMap))
-		undoCollision(2, 1, gameMap);
+	pair<size_t, size_t> futurePosition = {m_Position.first, m_Position.second-1};
+	if ( !checkIfCollisions(gameMap, futurePosition) )
+		--m_Position.second;
 }
 
 void CPlayer::mvRight(CMap &gameMap) {
-	++m_Position.second;
-	if (checkIfCollisions(gameMap))
-		undoCollision(2, 2, gameMap);
+	pair<size_t, size_t> futurePosition = {m_Position.first, m_Position.second+1};
+	if ( !checkIfCollisions(gameMap, futurePosition) )
+		++m_Position.second;
 }
 
 void CPlayer::collectCoin(CMap &gameMap) {
@@ -101,13 +101,13 @@ void CPlayer::collectCoin(CMap &gameMap) {
 	m_Score++;
 }
 
-bool CPlayer::checkIfCollisions(CMap &gameMap) {
+bool CPlayer::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> position) {
 	vector<vector<char>> map = gameMap.m_CharMap;
 
-	if (wallCollision(gameMap, m_Position))
+	if (wallCollision(gameMap, position))
 		return true;
 
-	switch (map[m_Position.first][m_Position.second]) {
+	switch (map[position.first][position.second]) {
         case '.':
             collectCoin(gameMap);
             break;
@@ -116,7 +116,7 @@ bool CPlayer::checkIfCollisions(CMap &gameMap) {
             m_IsBerserk = true;
             break;
         case 'T':
-            if (m_Position == gameMap.m_TeleportIn)
+            if (position == gameMap.m_TeleportIn)
                 m_Position = gameMap.m_TeleportOut;
             else
                 m_Position = gameMap.m_TeleportIn;
@@ -125,14 +125,5 @@ bool CPlayer::checkIfCollisions(CMap &gameMap) {
             break;
     }
 
-	return ( corridorCollision(map, m_Position) );
-}
-
-//? value == 1 -> increment
-//? value == 2 -> decrement
-void CPlayer::undoCollision(int coord, int value, CMap &gameMap) {
-	if (coord == 1)
-		value == 1 ? ++m_Position.first : --m_Position.first;
-	else
-		value == 1 ? ++m_Position.second : --m_Position.second;
+	return ( corridorCollision(map, position) );
 }

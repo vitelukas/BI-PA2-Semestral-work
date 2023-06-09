@@ -9,7 +9,7 @@ CGhost_1::CGhost_1()
     m_EntityLook = 5;
 }
 
-void CGhost_1::decideMoveDirection(CMap& gameMap, const CPlayer& player) {
+void CGhost_1::decideMoveDirection(CMap &gameMap, const CEntity &player) {
 	size_t nextRow, nextCol;
 
     // Perform BFS to find the shortest path towards the player
@@ -25,10 +25,10 @@ void CGhost_1::decideMoveDirection(CMap& gameMap, const CPlayer& player) {
     else if (nextCol > m_Position.second)
         mvRight(gameMap);
     else
-        CEntity::decideMoveDirection(gameMap);
+        CGhost::decideMoveDirection(gameMap, player);
 }
 
-void CGhost_1::findShortestPath(CMap& gameMap, const CPlayer& player, size_t &nextRow, size_t &nextCol) {
+void CGhost_1::findShortestPath(CMap &gameMap, const CEntity &player, size_t &nextRow, size_t &nextCol) {
     vector<vector<bool>> visited(gameMap.m_Height, vector<bool>(gameMap.m_Width, false));
     vector<vector<pair<size_t, size_t>>> parent(gameMap.m_Height, vector<pair<size_t, size_t>>(gameMap.m_Width, make_pair(SIZE_MAX, SIZE_MAX)));
     char futureDir = 'n';
@@ -45,7 +45,7 @@ void CGhost_1::findShortestPath(CMap& gameMap, const CPlayer& player, size_t &ne
             pair<size_t, size_t> current = q.front();
             q.pop();
 
-            if (current == player.m_Position)
+            if (current == player.getPosition())
                 break;
 
             // Check adjacent cells
@@ -71,7 +71,7 @@ void CGhost_1::findShortestPath(CMap& gameMap, const CPlayer& player, size_t &ne
 
         // Trace back the path from player's position to ghost
         vector<pair<size_t, size_t>> path;
-        pair<size_t, size_t> current = player.m_Position;
+        pair<size_t, size_t> current = player.getPosition();
         while (current != m_Position) {
             path.push_back(current);
             current = parent[current.first][current.second];

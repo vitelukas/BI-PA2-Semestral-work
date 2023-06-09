@@ -8,9 +8,10 @@ CGhost_2::CGhost_2()
     m_EntityLook = 6;
 }
 
-void CGhost_2::decideMoveDirection(CMap& gameMap, const CPlayer& player) {
+void CGhost_2::decideMoveDirection(CMap& gameMap, const CEntity& player) {
 	size_t nextRow, nextCol;
 
+	// Predict the player's future position and use BFS to find the shortest path towards that position
 	findShortestPath(gameMap , player, nextRow, nextCol);
 
     // Determine the next move based on the algorithm's found position
@@ -23,25 +24,24 @@ void CGhost_2::decideMoveDirection(CMap& gameMap, const CPlayer& player) {
     else if (nextCol > m_Position.second)
         mvRight(gameMap);
     else {
-        CEntity::decideMoveDirection(gameMap);
+        CGhost::decideMoveDirection(gameMap, player);
 		//todo pokud pozice zustane stejna, proved random pohyb
 		//todo - if the position remains the same, make a random move
 	}
 		
 }
 
-// Perform BFS to find the shortest path to the player
-void CGhost_2::findShortestPath(CMap& gameMap, const CPlayer& player, size_t &nextRow, size_t &nextCol) {
+void CGhost_2::findShortestPath(CMap& gameMap, const CEntity& player, size_t &nextRow, size_t &nextCol) {
     vector<vector<bool>> visited(gameMap.m_Height, vector<bool>(gameMap.m_Width, false));
     vector<vector<pair<size_t, size_t>>> parent(gameMap.m_Height, vector<pair<size_t, size_t>>(gameMap.m_Width, make_pair(SIZE_MAX, SIZE_MAX)));
     char futureDir = 'n';
-	pair<size_t, size_t> playersPosition = player.m_Position;
+	pair<size_t, size_t> playersPosition = player.getPosition();
 
-	if (player.m_Direction == 'a' || player.m_Direction == 'd') {
-		playersPosition.second = min(player.m_Position.second + 4, gameMap.m_Width-2);
+	if (player.getDirection() == 'a' || player.getDirection() == 'd') {
+		playersPosition.second = min(player.getPosition().second + 4, gameMap.m_Width-2);
 	} else {
-		playersPosition.first = min(player.m_Position.first + 4, gameMap.m_Height-2);
-		playersPosition.second = min(player.m_Position.second + 4, gameMap.m_Width-2);
+		playersPosition.first = min(player.getPosition().first + 4, gameMap.m_Height-2);
+		playersPosition.second = min(player.getPosition().second + 4, gameMap.m_Width-2);
 	}
 
     // Repeat the BFS algorithm until we find a valid path towards the player

@@ -8,42 +8,24 @@ CEntity::CEntity()
 	m_Direction = 'n';
 }
 
-void CEntity::decideMoveDirection(CMap &gameMap) {
-	switch (m_Direction) {
-		case 'w':
-			mvUp(gameMap);
-			break;
-		case 's':
-			mvDown(gameMap);
-			break;
-		case 'a':
-			mvLeft(gameMap);
-			break;
-		case 'd':
-			mvRight(gameMap);
-			break;
-		default:
-			mvaddch(m_Position.first, m_Position.second, m_Character);
-			break;
-	}
-}
-
-bool CEntity::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> position) {
+bool CEntity::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> futurePosition) {
 	vector<vector<char>> map = gameMap.m_CharMap;
 
-	if ( wallCollision(gameMap, position) )
+	// First check if the position is out of bounds to anticipate SEG fault
+	if ( wallCollision(gameMap, futurePosition) )
 		return true;
 
-	if (map[position.first][position.second] == 'T') {
-		if (position == gameMap.m_TeleportIn)
-			position = gameMap.m_TeleportOut;
+	// If the position overlaps with a teleport, change the futurePosition to the other teleport position
+	// --> this method is only used when a ghost is searching for a path using BFS
+	if (map[futurePosition.first][futurePosition.second] == 'T') {
+		if (futurePosition == gameMap.m_TeleportIn)
+			futurePosition = gameMap.m_TeleportOut;
 		else
-			position = gameMap.m_TeleportIn;
+			futurePosition = gameMap.m_TeleportIn;
     }
 
-	return ( corridorCollision(map, position) );
+	return ( corridorCollision(map, futurePosition) );
 }
-
 
 bool CEntity::wallCollision(const CMap &gameMap, pair<size_t, size_t> position) {
 	return position.second >= gameMap.m_Width -1 ||
@@ -53,10 +35,10 @@ bool CEntity::wallCollision(const CMap &gameMap, pair<size_t, size_t> position) 
 
 bool CEntity::corridorCollision(vector<vector<char>> map, pair<size_t, size_t> position) {
 	return  map[position.first][position.second] == ' ' && 
-			(map[position.first][position.second - 1] == '#' ||  map[position.first][position.second + 1] == '#' );
+		   (map[position.first][position.second - 1] == '#' || map[position.first][position.second + 1] == '#' );
 }
 
-void CEntity::formatTile(char &tile) {
+void CEntity::formatTile(char &tile) const {
 	if (tile == '&' || tile == '@' || tile == '0' || tile == 'T' || tile == 'O') {
 		tile = ' ';
 		return;
@@ -72,4 +54,12 @@ void CEntity::formatTile(char &tile) {
 	default:
 		break;
 	}
+}
+
+std::pair<size_t, size_t> CEntity::getPosition() const {
+    return m_Position;
+}
+
+char CEntity::getDirection() const {
+    return m_Direction;
 }

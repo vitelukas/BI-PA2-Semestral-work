@@ -186,12 +186,11 @@ void CGame::goBerserk() {
     }
 
     while ( elapsedTime < m_Player.m_BerserkTime ) {
-        // Update but in berserk mode
+        //todo Update but in berserk mode
         reloadMap();
 
         m_Player.move(m_Map);
 
-        //todo ensure that the ghost will move in the random direction if there is a collision
         // Move ghosts in random directions;
         m_Ghost_1.move(m_Map, m_Player);
         m_Ghost_2.move(m_Map, m_Player);

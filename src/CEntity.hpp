@@ -9,7 +9,7 @@ class CEntity {
 
 		virtual ~CEntity() {}
 
-		void decideMoveDirection(CMap &);
+		virtual void decideMoveDirection(CMap&, const CEntity &) = 0;
 
 		virtual void mvUp(CMap&) = 0;
 
@@ -25,7 +25,11 @@ class CEntity {
 
 		bool corridorCollision(vector<vector<char>>, pair<size_t, size_t>);
 
-		void formatTile(char&);
+		void formatTile(char&) const;
+
+		std::pair<size_t, size_t> getPosition() const;
+
+		char getDirection() const;
 
 	protected:
 		//		y		x
@@ -34,5 +38,5 @@ class CEntity {
     	std::chrono::steady_clock::time_point m_CurrentTime, m_PreviousTime;
 		char m_Direction, m_Character; 
 		int m_EntityLook;
-		friend class CGame;
+		friend class CGame;		
 };

@@ -47,56 +47,81 @@ void CGhost::move(CMap& gameMap, const CPlayer& player) {
 	m_PreviousTime = m_CurrentTime; // Update the timer
 }
 
-void CGhost::mvUp(CMap& gameMap) {
-    --m_Position.first;
-    if (checkIfCollisions(gameMap, 'w')) {
-        ++m_Position.first;
+void CGhost::decideMoveDirection(CMap &gameMap, const CEntity &player) {
+	switch (m_Direction) {
+		case 'w':
+			mvUp(gameMap);
+			break;
+		case 's':
+			mvDown(gameMap);
+			break;
+		case 'a':
+			mvLeft(gameMap);
+			break;
+		case 'd':
+			mvRight(gameMap);
+			break;
+		default:
+			mvaddch(m_Position.first, m_Position.second, m_Character);
+			break;
 	}
-	m_Direction = 'w';
+}
+
+void CGhost::mvUp(CMap& gameMap) {
+	pair<size_t, size_t> futurePosition = {m_Position.first-1, m_Position.second};
+    if (checkIfCollisions(gameMap, futurePosition)) {
+		chooseRandomMove(gameMap);
+	} else {
+	    --m_Position.first;
+		m_Direction = 'w';
+	}
 }
 
 void CGhost::mvDown(CMap& gameMap) {
-    ++m_Position.first;
-    if (checkIfCollisions(gameMap, 's')) {
-        --m_Position.first;
+	pair<size_t, size_t> futurePosition = {m_Position.first+1, m_Position.second};
+    if (checkIfCollisions(gameMap, futurePosition)) {
+		chooseRandomMove(gameMap);
+	} else {
+    	++m_Position.first;
+		m_Direction = 's';
 	}
-	m_Direction = 's';
 }
 
 void CGhost::mvLeft(CMap& gameMap) {
-    --m_Position.second;
-    if (checkIfCollisions(gameMap, 'a')) {
-        ++m_Position.second;
+	pair<size_t, size_t> futurePosition = {m_Position.first, m_Position.second-1};
+    if (checkIfCollisions(gameMap, futurePosition)) {
+		chooseRandomMove(gameMap);
+	} else {
+    	--m_Position.second;
+		m_Direction = 'a';
 	}
-	m_Direction = 'a';
 }
 
 void CGhost::mvRight(CMap& gameMap) {
-    ++m_Position.second;
-    if (checkIfCollisions(gameMap, 'd')) {
-        --m_Position.second;
+	pair<size_t, size_t> futurePosition = {m_Position.first, m_Position.second+1};
+    if (checkIfCollisions(gameMap, futurePosition)) {
+		chooseRandomMove(gameMap);
+	} else {
+    	++m_Position.second;
+		m_Direction = 'd';
 	}
-	m_Direction = 'd';
 }
 
-bool CGhost::checkIfCollisions(CMap &gameMap, char futureDirection) {
-	return checkIfCollisions(gameMap, futureDirection, m_Position);
-}
-
-bool CGhost::checkIfCollisions(CMap& gameMap, char futureDirection, pair<size_t, size_t> position) {
+bool CGhost::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> futurePosition) {
     vector<vector<char>> map = gameMap.m_CharMap;
+	char futureDirection = determineDirection(futurePosition);
 
-	if (wallCollision(gameMap, position))
+	if (wallCollision(gameMap, futurePosition))
 		return true;
 
-	if (map[position.first][position.second] == 'T') {
-		if (position == gameMap.m_TeleportIn)
+	if (map[futurePosition.first][futurePosition.second] == 'T') {
+		if (futurePosition == gameMap.m_TeleportIn)
 			m_Position = gameMap.m_TeleportOut;
 		else
 			m_Position = gameMap.m_TeleportIn;
     }
 
-	return ( corridorCollision(map, position) || !checkDirectionOK(futureDirection) );
+	return ( corridorCollision(map, futurePosition) || !checkDirectionOK(futureDirection) );
 }
 
 bool CGhost::checkDirectionOK(char futureDirection) {
@@ -120,7 +145,7 @@ char CGhost::determineDirection(pair<size_t, size_t> futurePos) {
         // Right
         return 'd';
     } else {
-        // Staye in the same position -> same direction
+        // Stayed in the same position -> same direction
         return m_Direction;
     }
 }
