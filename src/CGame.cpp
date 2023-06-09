@@ -63,7 +63,7 @@ void CGame::updateGameState(int berserkActive) {
     reloadMap();
 }
 
-void CGame::reloadMap() {  
+void CGame::reloadMap() const {  
     // Only refreshes the changed cells, not the whole screen
     refresh();
 }
@@ -232,7 +232,7 @@ void CGame::setEntities(char entity, size_t y, size_t x) {
     }
 }
 
-void CGame::playerWon() {
+void CGame::playerWon() const {
     attron(A_STANDOUT);
     mvprintw(m_Map.m_Height + 4, m_Map.m_Width/2 - 4, "YOU WON!");
     attroff(A_STANDOUT);

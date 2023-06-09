@@ -49,7 +49,7 @@ void CMap::loadMap(const string &fileName) {
 	m_Width = m_CharMap[0].size();
 }
 
-void CMap::printMap () {
+void CMap::printMap() const {
 	clear();
 
 	size_t maxY, maxX;

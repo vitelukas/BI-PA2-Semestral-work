@@ -21,9 +21,9 @@ class CEntity {
 		
 		virtual bool checkIfCollisions(CMap &, pair<size_t, size_t>);
 
-		bool wallCollision(const CMap &, pair<size_t, size_t>);
+		bool wallCollision(const CMap &, pair<size_t, size_t>) const;
 
-		bool corridorCollision(vector<vector<char>>, pair<size_t, size_t>);
+		bool corridorCollision(vector<vector<char>>, pair<size_t, size_t>) const;
 
 		void formatTile(char&) const;
 

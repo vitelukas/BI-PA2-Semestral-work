@@ -19,7 +19,7 @@ class CMap {
 
 		void transformMap(char, size_t, size_t);
 
-		void printMap();
+		void printMap() const;
 
 	private:
 		size_t m_Height, m_Width;

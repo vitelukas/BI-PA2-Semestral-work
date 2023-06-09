@@ -27,13 +27,13 @@ bool CEntity::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> futurePositi
 	return ( corridorCollision(map, futurePosition) );
 }
 
-bool CEntity::wallCollision(const CMap &gameMap, pair<size_t, size_t> position) {
+bool CEntity::wallCollision(const CMap &gameMap, pair<size_t, size_t> position) const {
 	return position.second >= gameMap.m_Width -1 ||
 		   position.first >= gameMap.m_Height -1 ||
 		   gameMap.m_CharMap[position.first][position.second] == '#';
 }
 
-bool CEntity::corridorCollision(vector<vector<char>> map, pair<size_t, size_t> position) {
+bool CEntity::corridorCollision(vector<vector<char>> map, pair<size_t, size_t> position) const {
 	return  map[position.first][position.second] == ' ' && 
 		   (map[position.first][position.second - 1] == '#' || map[position.first][position.second + 1] == '#' );
 }

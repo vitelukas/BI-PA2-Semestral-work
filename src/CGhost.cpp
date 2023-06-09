@@ -10,7 +10,7 @@ CGhost::CGhost()
         {'s', 1},
         {'a', 2},
         {'d', 3},
-        {'x', 4},
+        {'n', 4},
 	};
 	m_BackDirections = {
 		{0, 's'},
@@ -124,14 +124,14 @@ bool CGhost::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> futurePositio
 	return ( corridorCollision(map, futurePosition) || !checkDirectionOK(futureDirection) );
 }
 
-bool CGhost::checkDirectionOK(char futureDirection) {
-	int dirToNum = m_DirectionsTable[m_Direction];
-	char bannedDirection = m_BackDirections[dirToNum];
+bool CGhost::checkDirectionOK(char futureDirection) const {
+	int dirToNum = m_DirectionsTable.at(m_Direction);
+	char bannedDirection = m_BackDirections.at(dirToNum);
 
 	return !(bannedDirection == futureDirection);
 }
 
-char CGhost::determineDirection(pair<size_t, size_t> futurePos) {
+char CGhost::determineDirection(pair<size_t, size_t> futurePos) const {
     if (futurePos.first < m_Position.first) {
         // Up
         return 'w';

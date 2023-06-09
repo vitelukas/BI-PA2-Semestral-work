@@ -22,9 +22,9 @@ class CGhost : public CEntity {
 
 		virtual bool checkIfCollisions(CMap &, pair<size_t, size_t>s) override;
 
-		bool checkDirectionOK(char);
+		bool checkDirectionOK(char) const;
 
-		char determineDirection(pair<size_t, size_t>);
+		char determineDirection(pair<size_t, size_t>) const;
 
 		void chooseRandomMove(CMap&);
 

@@ -18,9 +18,9 @@ class CMainMenu {
 		/* Will also show "initial dialog info" */
         int run();
 
-        void prnt();
+        void prnt() const;
 
-		void update();
+		void update() const;
 
 		void chooseDifficulty();
 

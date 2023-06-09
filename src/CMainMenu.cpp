@@ -71,7 +71,7 @@ int CMainMenu::run() {
     }
 }
 
-void:: CMainMenu::update() {
+void:: CMainMenu::update() const {
     clear();
     int y = m_MenuItemStart;
     int x = m_xOffset;
@@ -83,7 +83,7 @@ void:: CMainMenu::update() {
     return;
 }
 
-void:: CMainMenu::prnt() {
+void:: CMainMenu::prnt() const {
     int y = m_MenuItemStart;
     int x = m_xOffset + 3;
 

@@ -6,7 +6,7 @@ CLeaderBoard::CLeaderBoard()
 	m_FileLocation = "examples/leaderboard/leaderboard.txt";
 }
 
-void CLeaderBoard::makeEntry(int playerScore) {
+void CLeaderBoard::makeEntry(int playerScore) const {
     string playerName = getPlayerName();
     ifstream inputFile(m_FileLocation);
 
@@ -46,7 +46,7 @@ void CLeaderBoard::makeEntry(int playerScore) {
     outputFile.close(); // Close the file
 }
 
-string CLeaderBoard::getPlayerName() {
+string CLeaderBoard::getPlayerName() const {
     clear();
 	timeout(-1);
 
@@ -88,7 +88,7 @@ string CLeaderBoard::getPlayerName() {
 }
 
 
-void CLeaderBoard::showLeaderboard() {
+void CLeaderBoard::showLeaderboard() const {
 	clear();
 
 	ifstream sourceFile(m_FileLocation);

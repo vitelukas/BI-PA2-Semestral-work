@@ -28,13 +28,13 @@ class CGame {
 
 		void setEntityAfterCollision(int = -1);
 
-		void reloadMap();
+		void reloadMap() const;
 
 		void setEntities(char entity, size_t x, size_t y);
 
 		void goBerserk();
 
-		void playerWon();
+		void playerWon() const;
 
 	protected:
 		bool m_GameIsDone;
