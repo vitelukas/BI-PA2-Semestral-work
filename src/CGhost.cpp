@@ -3,7 +3,7 @@ using namespace std;
 using namespace std::chrono;
 
 CGhost::CGhost()
-	:CEntity(), m_GhostSlower(100)
+	:CEntity(), m_GhostSlower(60)
 {
 	m_DirectionsTable = {
 		{'w', 0},

@@ -22,13 +22,13 @@ class CPlayer : public CEntity{
 
 		virtual bool checkIfCollisions(CMap &, pair<size_t, size_t>) override;
 		
-		void collectCoin(CMap &);
+		void collectCoin(CMap &, pair<size_t, size_t>);
 
 	protected:
 		char m_PrevDirection;
 		bool m_IsBerserk;
 		unsigned int m_Lifes, m_Score;
-    	std::chrono::milliseconds m_BerserkTime;
+    	std::chrono::milliseconds m_BerserkDuration;
 		friend class CGame;
 		friend class CGhost;
 		friend class CGhost_1;

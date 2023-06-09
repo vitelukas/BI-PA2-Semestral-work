@@ -1,4 +1,5 @@
 #include "CMap.hpp"
+#include "CEntity.hpp"
 #include "CPlayer.hpp"
 #include "CGhost_1.hpp"
 #include "CGhost_2.hpp"
@@ -17,21 +18,23 @@ class CGame {
 
 		void initializeGame();
 
-		void update();
-
-		void handleCollisions();
+		void updateGameState(int);
 
 		void handleGhostCollision();
 
-		bool checkGhostCollision();
+		void handleBerserkCollision();
 
-		void setEntityAfterCollision();
+		int checkGhostCollision();
+
+		void setEntityAfterCollision(int = -1);
 
 		void reloadMap();
 
 		void setEntities(char entity, size_t x, size_t y);
 
 		void goBerserk();
+
+		void playerWon();
 
 	protected:
 		bool m_GameIsDone;

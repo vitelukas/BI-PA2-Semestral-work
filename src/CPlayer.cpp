@@ -13,7 +13,7 @@ CPlayer::CPlayer()
 	m_EntityLook = 4;
 	m_IsBerserk = false;
 
-	m_BerserkTime = milliseconds(6000);
+	m_BerserkDuration = milliseconds(6000);
 	m_Speed = milliseconds(160);
     m_PreviousTime = steady_clock::now(); // Initialize m_PreviousTime to the current time point
 }
@@ -96,8 +96,8 @@ void CPlayer::mvRight(CMap &gameMap) {
 		++m_Position.second;
 }
 
-void CPlayer::collectCoin(CMap &gameMap) {
-	gameMap.m_CharMap[m_Position.first][m_Position.second] = ' ';
+void CPlayer::collectCoin(CMap &gameMap, pair<size_t, size_t> position) {
+	gameMap.m_CharMap[position.first][position.second] = ' ';
 	m_Score++;
 }
 
@@ -109,10 +109,10 @@ bool CPlayer::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> position) {
 
 	switch (map[position.first][position.second]) {
         case '.':
-            collectCoin(gameMap);
+            collectCoin(gameMap, position);
             break;
         case 'B':
-            collectCoin(gameMap);
+            collectCoin(gameMap, position);
             m_IsBerserk = true;
             break;
         case 'T':
