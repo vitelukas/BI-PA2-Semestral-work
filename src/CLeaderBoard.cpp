@@ -1,14 +1,13 @@
 #include "CLeaderBoard.hpp"
 using namespace std;
 
-CLeaderBoard::CLeaderBoard() 
-{
-	m_FileLocation = "examples/leaderboard/leaderboard.txt";
-}
+#define LEADERBOARD_FILE "examples/leaderboard/leaderboard.txt"
+
+CLeaderBoard::CLeaderBoard() {}
 
 void CLeaderBoard::makeEntry(int playerScore) const {
     string playerName = getPlayerName();
-    ifstream inputFile(m_FileLocation);
+    ifstream inputFile(LEADERBOARD_FILE);
 
     if (!inputFile.is_open()) {
         cerr << "Error while opening the leaderboard file!" << endl;
@@ -36,7 +35,7 @@ void CLeaderBoard::makeEntry(int playerScore) const {
     });
 	
     // Rewrite the leaderboard file with the updated entries
-    ofstream outputFile(m_FileLocation); // Open the file in write mode
+    ofstream outputFile(LEADERBOARD_FILE); // Open the file in write mode
 	int position = 1;
     for (const auto& entry : leaderboardEntries) {
         outputFile << position << ". " << entry.first << ": " << entry.second << endl;
@@ -91,7 +90,7 @@ string CLeaderBoard::getPlayerName() const {
 void CLeaderBoard::showLeaderboard() const {
 	clear();
 
-	ifstream sourceFile(m_FileLocation);
+	ifstream sourceFile(LEADERBOARD_FILE);
 
     if ( !sourceFile.is_open() ) {
 		cerr << "Error while opening the leaderboard file!" << endl;

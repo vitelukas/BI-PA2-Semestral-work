@@ -1,4 +1,5 @@
 #include "CMap.hpp"
+#include "CGameMode.hpp"
 #include "CEntity.hpp"
 #include "CPlayer.hpp"
 #include "CGhost_1.hpp"
@@ -14,9 +15,9 @@ class CGame {
 	public:
 		CGame();
 
-		void run();
+		void run(const CGameMode &gameMode);
 
-		void initializeGame();
+		void initializeGame(const CGameMode &gameMode);
 
 		void updateGameState(int);
 
@@ -38,7 +39,10 @@ class CGame {
 
 		void playerLost() const;
 
+		void setGameConfig(const CGameMode &gameMode);
+
 	protected:
+		int m_GameMode;
 		bool m_GameIsDone;
 		size_t m_ScoreToWin;
 		CMap m_Map;	

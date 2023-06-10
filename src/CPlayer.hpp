@@ -25,7 +25,7 @@ class CPlayer : public CEntity {
 		 * Override method to decide the movement direction of the player entity.
 		 *
 		 * @param map Reference to the game map object.
-		 * @param entity Reference to the entity object for collision detection.
+		 * @param entity Reference to the entity object serving for move decision.
 		 */
 		virtual void decideMoveDirection(CMap& map, const CEntity& entity) override;
 

@@ -2,13 +2,15 @@
 using namespace std;
 using namespace std::chrono;
 
-CGame::CGame() {
-    m_GameIsDone = false;
-    m_ScoreToWin = 0;
+#define MAP_FILE "examples/maps/main_map.txt"
+
+CGame::CGame() 
+    : m_GameMode(1), m_GameIsDone(false), m_ScoreToWin(0) 
+{
 }
 
-void CGame::run() {
-    initializeGame();
+void CGame::run(const CGameMode &gameMode) {
+    initializeGame(gameMode);
 
     while ( !m_GameIsDone ) {
         updateGameState(0);
@@ -27,17 +29,17 @@ void CGame::run() {
         playerLost();
 
     // Pause the game for a bit after the player wins
-    napms(2000);
+    napms(3500);
 
     return;
 }
 
-void CGame::initializeGame() {
+void CGame::initializeGame(const CGameMode &gameMode) {
     clear();   
-    m_Map.loadMap("examples/maps/main_map.txt");
 
-    //TODO - loadGameConfig();
-    //todo      - check if it failed and catch an error if so
+    m_Map.loadMap(MAP_FILE);
+
+    setGameConfig(gameMode);
 
     for (size_t y = 0; y < m_Map.m_Height; y++) {
         for (size_t x = 0; x < m_Map.m_CharMap[y].size(); x++) {
@@ -46,9 +48,6 @@ void CGame::initializeGame() {
             m_Map.transformMap(entity, y, x );
         }
     }
-
-    //todo include into loadGameConfig() and delete from here ↓ 
-    m_Ghost_1.m_Speed = m_Ghost_2.m_Speed = m_Ghost_3.m_Speed = m_Player.m_Speed;
 
     m_Map.printMap();
 }
@@ -153,7 +152,7 @@ void CGame::goBerserk() {
     m_Player.m_IsBerserk = false;
     auto y = m_Map.m_Height + 2;
     auto x = m_Map.m_Width - 20;
-    int slowGhost = 150;
+    int slowGhost = m_Ghost_1.m_GhostSlower;
     attron(A_REVERSE);
     mvprintw(y, x, "Berserk mode active");
     attroff(A_REVERSE);
@@ -250,4 +249,17 @@ void CGame::playerLost() const {
     mvprintw(m_Map.m_Height + 4, m_Map.m_Width/2 - 10, "YOU LOST, BETTER LUCK NEXT TIME.");
     attroff(A_STANDOUT);
     refresh();
+}
+
+void CGame::setGameConfig(const CGameMode &gameMode) {
+    vector<CGhost*> ghosts = {&m_Ghost_1, &m_Ghost_2, &m_Ghost_3};
+
+    for (auto ghost : ghosts) {
+        ghost->m_GhostSlower = gameMode.m_GhostSpeed;
+        ghost->m_Speed = milliseconds(gameMode.m_EntitySpeed);
+    }
+
+    m_Player.m_Speed = milliseconds(gameMode.m_EntitySpeed);
+    m_Player.m_BerserkDuration = milliseconds(gameMode.m_BerserkerDuration);
+    m_Player.m_Lives = gameMode.m_PlayerLives;
 }

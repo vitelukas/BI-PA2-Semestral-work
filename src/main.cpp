@@ -21,7 +21,7 @@ int main() {
 		timeout(-1);		
 		CMainMenu mainMenu;
 
-		again = mainMenu.run();
+		again = mainMenu.run(again);
 	}
 
 	delwin(stdscr);

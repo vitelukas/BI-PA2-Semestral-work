@@ -19,6 +19,5 @@ class CLeaderBoard {
 		std::string getPlayerName() const;
 	
 	private:
-		std::string m_FileLocation;
-		// std::map<int, int> m_PositionScore;
+	
 };
