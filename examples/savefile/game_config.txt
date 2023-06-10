@@ -1,7 +1,0 @@
-#Easy
-3 160 200 6000
-#Medium
-2 160 100 4500
-#Hard
-1 160 50 3000
-# lives | entitySpeed | ghostSlower | berserkDuration
