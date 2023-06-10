@@ -2,13 +2,15 @@
 using namespace std;
 using namespace std::chrono;
 
-CGame::CGame() {
-    m_GameIsDone = false;
-    m_ScoreToWin = 0;
+#define MAP_FILE "examples/maps/main_map.txt"
+
+CGame::CGame() 
+    : m_GameMode(1), m_GameIsDone(false), m_ScoreToWin(0) 
+{
 }
 
-void CGame::run() {
-    initializeGame();
+void CGame::run(const CGameMode &gameMode) {
+    initializeGame(gameMode);
 
     while ( !m_GameIsDone ) {
         updateGameState(0);
@@ -21,17 +23,23 @@ void CGame::run() {
         m_Ghost_3.move(m_Map, m_Player);
     }
 
-    playerWon();
+    if (m_Player.m_Lives)
+        playerWon();
+    else
+        playerLost();
+
+    // Pause the game for a bit after the player wins
+    napms(3000);
 
     return;
 }
 
-void CGame::initializeGame() {
+void CGame::initializeGame(const CGameMode &gameMode) {
     clear();   
-    m_Map.loadMap("examples/maps/main_map.txt");
 
-    //TODO - loadGameConfig();
-    //todo      - check if it failed and catch an error if so
+    m_Map.loadMap(MAP_FILE);
+
+    setGameConfig(gameMode);
 
     for (size_t y = 0; y < m_Map.m_Height; y++) {
         for (size_t x = 0; x < m_Map.m_CharMap[y].size(); x++) {
@@ -40,9 +48,6 @@ void CGame::initializeGame() {
             m_Map.transformMap(entity, y, x );
         }
     }
-
-    //todo include into loadGameConfig() and delete from here ↓ 
-    m_Ghost_1.m_Speed = m_Ghost_2.m_Speed = m_Ghost_3.m_Speed = m_Player.m_Speed;
 
     m_Map.printMap();
 }
@@ -56,14 +61,14 @@ void CGame::updateGameState(int berserkActive) {
     berserkActive ? handleBerserkCollision() : handleGhostCollision();
 
     mvprintw(m_Map.m_Height + 1, 0, "Score: %d", m_Player.m_Score);
-    mvprintw(m_Map.m_Height + 2, 0, "Lives: %d", m_Player.m_Lifes);
+    mvprintw(m_Map.m_Height + 2, 0, "Lives: %d", m_Player.m_Lives);
     
-    m_GameIsDone = (m_Player.m_Score == m_ScoreToWin) || (m_Player.m_Lifes == 0);
+    m_GameIsDone = (m_Player.m_Score == m_ScoreToWin) || (m_Player.m_Lives == 0);
 
     reloadMap();
 }
 
-void CGame::reloadMap() {  
+void CGame::reloadMap() const {  
     // Only refreshes the changed cells, not the whole screen
     refresh();
 }
@@ -74,7 +79,7 @@ void CGame::handleGhostCollision() {
     if ( !checkGhostCollision() )
         return;
     
-    m_Player.m_Lifes--;
+    m_Player.m_Lives--;
     m_Player.m_PrevDirection = 'n';
 
     setEntityAfterCollision();
@@ -147,7 +152,7 @@ void CGame::goBerserk() {
     m_Player.m_IsBerserk = false;
     auto y = m_Map.m_Height + 2;
     auto x = m_Map.m_Width - 20;
-    int slowGhost = 150;
+    int slowGhost = m_Ghost_1.m_GhostSlower;
     attron(A_REVERSE);
     mvprintw(y, x, "Berserk mode active");
     attroff(A_REVERSE);
@@ -232,12 +237,29 @@ void CGame::setEntities(char entity, size_t y, size_t x) {
     }
 }
 
-void CGame::playerWon() {
+void CGame::playerWon() const {
     attron(A_STANDOUT);
     mvprintw(m_Map.m_Height + 4, m_Map.m_Width/2 - 4, "YOU WON!");
     attroff(A_STANDOUT);
     refresh();
+}
 
-    // Pause the game for a bit after the player wins
-    napms(1500);
+void CGame::playerLost() const {
+    attron(A_STANDOUT);
+    mvprintw(m_Map.m_Height + 4, m_Map.m_Width/2 - 10, "YOU LOST, BETTER LUCK NEXT TIME.");
+    attroff(A_STANDOUT);
+    refresh();
+}
+
+void CGame::setGameConfig(const CGameMode &gameMode) {
+    vector<CGhost*> ghosts = {&m_Ghost_1, &m_Ghost_2, &m_Ghost_3};
+
+    for (auto ghost : ghosts) {
+        ghost->m_GhostSlower = gameMode.m_GhostSpeed;
+        ghost->m_Speed = milliseconds(gameMode.m_EntitySpeed);
+    }
+
+    m_Player.m_Speed = milliseconds(gameMode.m_EntitySpeed);
+    m_Player.m_BerserkDuration = milliseconds(gameMode.m_BerserkerDuration);
+    m_Player.m_Lives = gameMode.m_PlayerLives;
 }

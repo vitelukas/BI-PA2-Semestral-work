@@ -12,13 +12,12 @@ class CLeaderBoard {
 	public:
         CLeaderBoard();
 
-		void showLeaderboard();
+		void showLeaderboard() const;
 
-		void makeEntry(int);
+		void makeEntry(int) const;
 
-		std::string getPlayerName();
+		std::string getPlayerName() const;
 	
 	private:
-		std::string m_FileLocation;
-		// std::map<int, int> m_PositionScore;
+	
 };

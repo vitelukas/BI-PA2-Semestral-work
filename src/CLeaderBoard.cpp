@@ -1,14 +1,13 @@
 #include "CLeaderBoard.hpp"
 using namespace std;
 
-CLeaderBoard::CLeaderBoard() 
-{
-	m_FileLocation = "examples/leaderboard/leaderboard.txt";
-}
+#define LEADERBOARD_FILE "examples/leaderboard/leaderboard.txt"
 
-void CLeaderBoard::makeEntry(int playerScore) {
+CLeaderBoard::CLeaderBoard() {}
+
+void CLeaderBoard::makeEntry(int playerScore) const {
     string playerName = getPlayerName();
-    ifstream inputFile(m_FileLocation);
+    ifstream inputFile(LEADERBOARD_FILE);
 
     if (!inputFile.is_open()) {
         cerr << "Error while opening the leaderboard file!" << endl;
@@ -36,7 +35,7 @@ void CLeaderBoard::makeEntry(int playerScore) {
     });
 	
     // Rewrite the leaderboard file with the updated entries
-    ofstream outputFile(m_FileLocation); // Open the file in write mode
+    ofstream outputFile(LEADERBOARD_FILE); // Open the file in write mode
 	int position = 1;
     for (const auto& entry : leaderboardEntries) {
         outputFile << position << ". " << entry.first << ": " << entry.second << endl;
@@ -46,14 +45,14 @@ void CLeaderBoard::makeEntry(int playerScore) {
     outputFile.close(); // Close the file
 }
 
-string CLeaderBoard::getPlayerName() {
+string CLeaderBoard::getPlayerName() const {
     clear();
 	timeout(-1);
 
     char ch = 'n';
     string playerName;
     size_t x, y, xOffset;
-	xOffset = (getmaxx(stdscr)/2) - 10;
+	xOffset = (getmaxx(stdscr)/2) - 4;
     x = xOffset + 7;
     y = 6;
 
@@ -64,21 +63,32 @@ string CLeaderBoard::getPlayerName() {
 	move(y, x);
 	curs_set(1);
 
-    while ((ch = getch()) != '\n') {
+    while (true) {
+        ch = getch();
 
-        if (ch == KEY_BACKSPACE || ch == 127) { // If user pressed backspace, remove the last character
+        if (ch == '\n') {
             if (!playerName.empty()) {
-                playerName.pop_back();
+                break;                  // Break the loop if the user entered a non-empty name
             }
-        } else if (isalnum(ch) || isspace(ch)) {				// If user enter a number or letter, append it to the plaerName
-            playerName.push_back(ch);
+        } 
+        else if (ch == KEY_BACKSPACE || ch == 127) {
+            if (!playerName.empty()) {
+                playerName.pop_back();  // Remove the last character if backspace was pressed and the name is not empty
+            }
+        } 
+        else if ( !isspace(ch) && (isalnum(ch) || isspace(ch) || ch == '_') ) {
+            playerName.push_back(ch);   // Append alphanumeric characters and spaces to the player's name
+        }
+        else {
+            mvprintw(y + 10, x - 17, "Only alnum chars and underscore(_) are allowed.");
         }
 
+
         move(y, 0);
-        clrtoeol(); // Clear the whole line before printing the name again
+        clrtoeol();                     // Clear the whole line before printing the name again
         move(y, 0);
 
-        mvprintw(y, x, playerName.c_str());
+        mvprintw(y, x, "%s", playerName.c_str());
         refresh();
     }
 
@@ -88,10 +98,10 @@ string CLeaderBoard::getPlayerName() {
 }
 
 
-void CLeaderBoard::showLeaderboard() {
+void CLeaderBoard::showLeaderboard() const {
 	clear();
 
-	ifstream sourceFile(m_FileLocation);
+	ifstream sourceFile(LEADERBOARD_FILE);
 
     if ( !sourceFile.is_open() ) {
 		cerr << "Error while opening the leaderboard file!" << endl;
@@ -110,7 +120,7 @@ void CLeaderBoard::showLeaderboard() {
 	mvprintw(maxY - 2, 1, "Press any key to exit.");
 
 	while (getline(sourceFile, line)) {
-		mvprintw(y, x, line.c_str());
+		mvprintw(y, x, "%s", line.c_str());
 		y++;
 	}
 

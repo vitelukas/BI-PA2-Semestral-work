@@ -2,7 +2,8 @@
 using namespace std;
 
 
-CMap::CMap() 
+CMap::CMap()
+	// Height and width will be set while loading the map from a file
 	:m_Height(0), m_Width(0), m_CoinCharr('.'), m_CharMap()
 {
 	m_TeleportIn = m_TeleportOut = make_pair(SIZE_MAX, SIZE_MAX);
@@ -49,7 +50,7 @@ void CMap::loadMap(const string &fileName) {
 	m_Width = m_CharMap[0].size();
 }
 
-void CMap::printMap () {
+void CMap::printMap() const {
 	clear();
 
 	size_t maxY, maxX;

@@ -20,11 +20,11 @@ class CGhost : public CEntity {
 
 		virtual void mvRight(CMap&) override;
 
-		virtual bool checkIfCollisions(CMap &, pair<size_t, size_t>s) override;
+		virtual bool checkIfCollisions(CMap &, pair<size_t, size_t>) override;
 
-		bool checkDirectionOK(char);
+		bool checkDirectionOK(char) const;
 
-		char determineDirection(pair<size_t, size_t>);
+		char determineDirection(pair<size_t, size_t>) const;
 
 		void chooseRandomMove(CMap&);
 

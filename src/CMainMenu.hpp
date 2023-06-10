@@ -1,10 +1,8 @@
-#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <ncurses.h>
-#include <fstream>
-#include <vector>
 #include "CLeaderBoard.hpp"
-#include "CGameMode.hpp"
 #include "CGame.hpp"
 
 #pragma once
@@ -13,21 +11,33 @@ class CMainMenu {
 	public:
         CMainMenu();
 
-		~CMainMenu();
+		~CMainMenu() = default;
 		
-		/* Will also show "initial dialog info" */
-        int run();
+        int run(int gameMode);
 
-        void prnt();
+        void prnt() const;
 
-		void update();
+		void update() const;
 
 		void chooseDifficulty();
 
+		void loadConfig(const std::string&);
+
+		void decideFinalGameMode();
+
+		void initialPrint() const;
+
+		void printBanner() const;
+
 	protected:	
-		int m_CursorPos, m_MenuItemStart, m_MenuItemEnd, m_xOffset, m_ChooseDiffPosition, m_ShowLeaderboard;
+		int m_MenuItemStart,		// Position of the first menu item
+			m_MenuItemEnd,			// 		-||-	   last	   -||-
+			m_CursorPos,			// Current cursor position in the menu
+			m_xOffset,				// The position for the start of pritning a text
+			m_ChooseDifficulty,		// The position of the choice for choosing a difficulty
+			m_ShowLeaderboard;		// 			    -||-			  showing the leaderboard
 		size_t m_Height, m_Width;
 		CGame m_Game;
-		CGameMode m_GameMode;
+		CGameMode m_PlayEasy, m_PlayMedium, m_PlayHard, m_FinalGameMode;
 		CLeaderBoard m_LeaderBoard;
 };
