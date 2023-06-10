@@ -52,7 +52,7 @@ string CLeaderBoard::getPlayerName() const {
     char ch = 'n';
     string playerName;
     size_t x, y, xOffset;
-	xOffset = (getmaxx(stdscr)/2) - 10;
+	xOffset = (getmaxx(stdscr)/2) - 4;
     x = xOffset + 7;
     y = 6;
 
@@ -63,18 +63,29 @@ string CLeaderBoard::getPlayerName() const {
 	move(y, x);
 	curs_set(1);
 
-    while ((ch = getch()) != '\n') {
+    while (true) {
+        ch = getch();
 
-        if (ch == KEY_BACKSPACE || ch == 127) { // If user pressed backspace, remove the last character
+        if (ch == '\n') {
             if (!playerName.empty()) {
-                playerName.pop_back();
+                break;                  // Break the loop if the user entered a non-empty name
             }
-        } else if (isalnum(ch) || isspace(ch)) {				// If user enter a number or letter, append it to the plaerName
-            playerName.push_back(ch);
+        } 
+        else if (ch == KEY_BACKSPACE || ch == 127) {
+            if (!playerName.empty()) {
+                playerName.pop_back();  // Remove the last character if backspace was pressed and the name is not empty
+            }
+        } 
+        else if ( !isspace(ch) && (isalnum(ch) || isspace(ch) || ch == '_') ) {
+            playerName.push_back(ch);   // Append alphanumeric characters and spaces to the player's name
+        }
+        else {
+            mvprintw(y + 10, x - 17, "Only alnum chars and underscore(_) are allowed.");
         }
 
+
         move(y, 0);
-        clrtoeol(); // Clear the whole line before printing the name again
+        clrtoeol();                     // Clear the whole line before printing the name again
         move(y, 0);
 
         mvprintw(y, x, "%s", playerName.c_str());

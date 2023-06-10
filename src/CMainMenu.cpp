@@ -4,29 +4,30 @@ using namespace std;
 #define CONFIG_FILE "./examples/config/game_config.txt"
 
 CMainMenu::CMainMenu() 
-    : m_CursorPos(10), m_MenuItemStart(10)
+    : m_MenuItemStart(12), m_CursorPos(m_MenuItemStart)
 {
     clear();
     m_ChooseDifficulty = m_MenuItemStart + 1;
     m_ShowLeaderboard = m_MenuItemStart + 2;
     m_MenuItemEnd = m_MenuItemStart + 3;
 	getmaxyx(stdscr, m_Height, m_Width); 
-    m_xOffset = (getmaxx(stdscr) / 2) - 3;
+    m_xOffset = (getmaxx(stdscr) / 2) - 9;
 }
 
 int CMainMenu::run(int gameMode) {
     loadConfig(CONFIG_FILE);
     m_Game.m_GameMode = gameMode;
     char getInput;
+    
+    initialPrint();
 
     // Run the main menu until the player chooses to play the game or end the program
     while(true){
         update();
         
-        // move the cursor to the start of the menu
-        move(m_MenuItemStart, m_xOffset);
-
         getInput = tolower(getch());
+        // Clear the previous choice
+        mvprintw(m_CursorPos, m_xOffset, "   ");
 
         if( getInput == 'w' ) {
             m_CursorPos--;
@@ -56,11 +57,12 @@ int CMainMenu::run(int gameMode) {
                 return m_Game.m_GameMode;
             } 
             else if ( m_CursorPos == m_ChooseDifficulty) {
-                //TODO Choose difficulty
                 chooseDifficulty();
+                initialPrint();
             } 
             else if ( m_CursorPos == m_ShowLeaderboard) {
                 m_LeaderBoard.showLeaderboard();
+                initialPrint();
             } 
             else if( m_CursorPos == m_MenuItemEnd ) {
                 return 0;
@@ -70,14 +72,13 @@ int CMainMenu::run(int gameMode) {
 }
 
 void:: CMainMenu::update() const {
-    clear();
-    int y = m_MenuItemStart;
+    int y = m_CursorPos;
     int x = m_xOffset;
 
-    int offset = m_CursorPos - m_MenuItemStart;
-    mvprintw(y + offset, x, ">> ");
+    mvprintw(y, x, ">> ");
 
-    prnt();
+    refresh();
+
     return;
 }
 
@@ -92,15 +93,61 @@ void:: CMainMenu::prnt() const {
 
     move(m_Height - 8, 0);
     printw("Controls:\nUp -> w\nDown -> s\nLeft -> a\nRight -> d\n\nPress enter to confirm your choice");
-    return;
+
 }
 
-//TODO
 void CMainMenu::chooseDifficulty() {
-    //set m_Game.m_GameMode
+    clear();
+    int positionEasy = m_Height/2 - 4;
+    int positionMedium = m_Height/2 - 2;
+    int positionHard = m_Height/2;
 
-    m_Game.m_GameMode = 3;
+    int choice = positionEasy;
 
+    attron(A_STANDOUT);
+    mvprintw(positionEasy -4, m_Width/2 - 8, "CHOOSE DIFFICULTY");
+    attroff(A_STANDOUT);
+
+    mvprintw(positionEasy, m_Width/2 - 2, "EASY");
+    mvprintw(positionMedium, m_Width/2 - 3, "MEDIUM");
+    mvprintw(positionHard, m_Width/2 - 2, "HARD");
+
+    while(true){
+        mvprintw(choice, m_Width/2 - 6, ">> ");
+        refresh();
+        
+        char getInput = tolower(getch());
+        mvprintw(choice, m_Width/2 - 6, "   ");
+
+        if( getInput == 'w' ) {
+            choice -= 2;
+        }
+        else if( getInput == 's') {
+            choice += 2;
+        }
+
+        if (choice < positionEasy) {
+			choice = positionHard;
+		}
+        else if (choice > positionHard ) {
+			choice = positionEasy;
+		}
+
+        // Choose what action should be performed based on the cursor position
+        if (getInput == '\n') {
+            if ( choice == positionEasy) {
+                m_Game.m_GameMode = 1;
+            } 
+            else if ( choice == positionMedium) {
+                m_Game.m_GameMode = 2;
+            } 
+            else if( choice == positionHard ) {
+                m_Game.m_GameMode = 3;
+            }
+            break;
+        }
+    }
+        
     return;
 }
 
@@ -162,4 +209,22 @@ void CMainMenu::decideFinalGameMode() {
         default:
             break;
     }
+}
+
+void CMainMenu::initialPrint() const {
+    clear();
+    prnt();
+    printBanner();
+}
+
+void CMainMenu::printBanner() const {
+    if (m_Height <= 14)
+        return;
+    int start = 1;
+    int x = m_Width/2 - 35;
+    mvprintw(start++, x, " ______   ______     ______           __    __     ______     __   __\n");
+    mvprintw(start++, x, "/\\  == \\ /\\  __ \\   /\\  ___\\         /\\ \"-./  \\   /\\  __ \\   /\\ \"-.\\ \\\n");
+    mvprintw(start++, x, "\\ \\  _-/ \\ \\  __ \\  \\ \\ \\____  _____ \\ \\ \\-./\\ \\  \\ \\  __ \\  \\ \\ \\-.  \\\n");
+    mvprintw(start++, x, " \\ \\_\\    \\ \\_\\ \\_\\  \\ \\_____\\ \\____\\ \\ \\_\\ \\ \\_\\  \\ \\_\\ \\_\\  \\ \\_\\\\\"\\_\\\n");
+    mvprintw(start++, x, "  \\/_/     \\/_/\\/_/   \\/_____/         \\/_/  \\/_/   \\/_/\\/_/   \\/_/ \\/_/\n");
 }

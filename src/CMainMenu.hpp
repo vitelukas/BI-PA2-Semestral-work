@@ -25,8 +25,17 @@ class CMainMenu {
 
 		void decideFinalGameMode();
 
+		void initialPrint() const;
+
+		void printBanner() const;
+
 	protected:	
-		int m_CursorPos, m_MenuItemStart, m_MenuItemEnd, m_xOffset, m_ChooseDifficulty, m_ShowLeaderboard;
+		int m_MenuItemStart,		// Position of the first menu item
+			m_MenuItemEnd,			// 		-||-	   last	   -||-
+			m_CursorPos,			// Current cursor position in the menu
+			m_xOffset,				// The position for the start of pritning a text
+			m_ChooseDifficulty,		// The position of the choice for choosing a difficulty
+			m_ShowLeaderboard;		// 			    -||-			  showing the leaderboard
 		size_t m_Height, m_Width;
 		CGame m_Game;
 		CGameMode m_PlayEasy, m_PlayMedium, m_PlayHard, m_FinalGameMode;

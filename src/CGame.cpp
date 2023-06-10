@@ -29,7 +29,7 @@ void CGame::run(const CGameMode &gameMode) {
         playerLost();
 
     // Pause the game for a bit after the player wins
-    napms(3500);
+    napms(3000);
 
     return;
 }
