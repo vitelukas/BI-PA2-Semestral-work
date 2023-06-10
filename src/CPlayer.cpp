@@ -8,12 +8,12 @@ CPlayer::CPlayer()
 {
 	m_PrevDirection = 'n';
 	m_Score = 0;
-	m_Lifes = 3;
+	m_Lives = 3;
 	m_Character = 'p';
 	m_EntityLook = 4;
 	m_IsBerserk = false;
 
-	m_BerserkDuration = milliseconds(6000);
+	m_BerserkDuration = milliseconds(3000);
 	m_Speed = milliseconds(160);
     m_PreviousTime = steady_clock::now(); // Initialize m_PreviousTime to the current time point
 }
@@ -53,7 +53,8 @@ void CPlayer::move(CMap & gameMap) {
 	attroff(COLOR_PAIR(4));
 }
 
-void CPlayer::decideMoveDirection(CMap &gameMap, const CEntity &player) {
+// Dummy argument is just a placeholder for late implementation (if another player will be added)
+void CPlayer::decideMoveDirection(CMap &gameMap, const CEntity &dummy) {
 	switch (m_Direction) {
 		case 'w':
 			mvUp(gameMap);

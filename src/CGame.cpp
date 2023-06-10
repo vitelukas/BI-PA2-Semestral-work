@@ -21,7 +21,13 @@ void CGame::run() {
         m_Ghost_3.move(m_Map, m_Player);
     }
 
-    playerWon();
+    if (m_Player.m_Lives)
+        playerWon();
+    else
+        playerLost();
+
+    // Pause the game for a bit after the player wins
+    napms(2000);
 
     return;
 }
@@ -56,9 +62,9 @@ void CGame::updateGameState(int berserkActive) {
     berserkActive ? handleBerserkCollision() : handleGhostCollision();
 
     mvprintw(m_Map.m_Height + 1, 0, "Score: %d", m_Player.m_Score);
-    mvprintw(m_Map.m_Height + 2, 0, "Lives: %d", m_Player.m_Lifes);
+    mvprintw(m_Map.m_Height + 2, 0, "Lives: %d", m_Player.m_Lives);
     
-    m_GameIsDone = (m_Player.m_Score == m_ScoreToWin) || (m_Player.m_Lifes == 0);
+    m_GameIsDone = (m_Player.m_Score == m_ScoreToWin) || (m_Player.m_Lives == 0);
 
     reloadMap();
 }
@@ -74,7 +80,7 @@ void CGame::handleGhostCollision() {
     if ( !checkGhostCollision() )
         return;
     
-    m_Player.m_Lifes--;
+    m_Player.m_Lives--;
     m_Player.m_PrevDirection = 'n';
 
     setEntityAfterCollision();
@@ -237,7 +243,11 @@ void CGame::playerWon() const {
     mvprintw(m_Map.m_Height + 4, m_Map.m_Width/2 - 4, "YOU WON!");
     attroff(A_STANDOUT);
     refresh();
+}
 
-    // Pause the game for a bit after the player wins
-    napms(1500);
+void CGame::playerLost() const {
+    attron(A_STANDOUT);
+    mvprintw(m_Map.m_Height + 4, m_Map.m_Width/2 - 10, "YOU LOST, BETTER LUCK NEXT TIME.");
+    attroff(A_STANDOUT);
+    refresh();
 }

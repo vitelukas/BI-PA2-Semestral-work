@@ -78,7 +78,7 @@ string CLeaderBoard::getPlayerName() const {
         clrtoeol(); // Clear the whole line before printing the name again
         move(y, 0);
 
-        mvprintw(y, x, playerName.c_str());
+        mvprintw(y, x, "%s", playerName.c_str());
         refresh();
     }
 
@@ -110,7 +110,7 @@ void CLeaderBoard::showLeaderboard() const {
 	mvprintw(maxY - 2, 1, "Press any key to exit.");
 
 	while (getline(sourceFile, line)) {
-		mvprintw(y, x, line.c_str());
+		mvprintw(y, x, "%s", line.c_str());
 		y++;
 	}
 

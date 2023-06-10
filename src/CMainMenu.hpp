@@ -15,7 +15,7 @@ class CMainMenu {
 
 		~CMainMenu();
 		
-		/* Will also show "initial dialog info" */
+		// Also shows "initial dialog info"
         int run();
 
         void prnt() const;

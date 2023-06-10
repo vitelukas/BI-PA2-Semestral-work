@@ -36,6 +36,8 @@ class CGame {
 
 		void playerWon() const;
 
+		void playerLost() const;
+
 	protected:
 		bool m_GameIsDone;
 		size_t m_ScoreToWin;

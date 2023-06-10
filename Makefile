@@ -2,12 +2,15 @@
 # C - compiler; L - linker
 CXX=g++
 LD=g++
-CXXFLAGS=-std=c++17 -Wall -pedantic -g
+CXXFLAGS=-std=c++17 -Wall -pedantic -O2 -g
 LIBS= -lncurses
 # Specify the directory for source files
 SRCDIR=./src
-# OBJ - variable listing all the object files that need to be created
-OBJS= $(SRCDIR)/main.o $(SRCDIR)/CMainMenu.o $(SRCDIR)/CLeaderBoard.o $(SRCDIR)/CGameMode.o $(SRCDIR)/CPlayEasy.o $(SRCDIR)/CPlayMedium.o $(SRCDIR)/CPlayHard.o $(SRCDIR)/CGame.o $(SRCDIR)/CMap.o $(SRCDIR)/CEntity.o $(SRCDIR)/CGhost.o $(SRCDIR)/CGhost_1.o $(SRCDIR)/CGhost_2.o $(SRCDIR)/CGhost_3.o $(SRCDIR)/CPlayer.o
+# Get all the .cpp files in the source directory
+SOURCES=$(wildcard $(SRCDIR)/*.cpp)
+# Generate the corresponding object file names by replacing .cpp with .o
+OBJS=$(SOURCES:.cpp=.o)
+
 
 # When we use 'make all' Pacman is the file tha will be build
 all: Pacman
@@ -35,6 +38,10 @@ clean:
 # Rule to generate dependency informations flie (using the -MM flag) for the source files
 deps:
 	$(CXX) -MM $(SRCDIR)/*.cpp > Makefile.d
+
+# Generate the project documentation
+doc:
+	doxygen Doxyfile
 
 # Run the executable file
 run:
