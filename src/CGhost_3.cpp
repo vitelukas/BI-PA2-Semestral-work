@@ -9,12 +9,12 @@ CGhost_3::CGhost_3()
 }
 
 void CGhost_3::decideMoveDirection(CMap& gameMap, const CEntity & player) {
-    if (player.getPosition().first < m_Position.first)
-        mvUp(gameMap);
-    else if (player.getPosition().first > m_Position.first)
-        mvDown(gameMap);
-    else if (player.getPosition().second < m_Position.second)
+    if (player.getPosition().second < m_Position.second)
         mvLeft(gameMap);
     else if (player.getPosition().second > m_Position.second)
         mvRight(gameMap);
+    else if (player.getPosition().first < m_Position.first)
+        mvUp(gameMap);
+    else if (player.getPosition().first > m_Position.first)
+        mvDown(gameMap);
 }

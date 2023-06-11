@@ -5,13 +5,14 @@ using namespace std::chrono;
 #define MAP_FILE "examples/maps/main_map.txt"
 
 CGame::CGame() 
-    : m_GameMode(1), m_GameIsDone(false), m_ScoreToWin(0) 
+    : m_GameMode(1), m_GameIsDone(false), m_ScoreToWin(0), m_EatenGhosts(0)
 {
 }
 
 void CGame::run(const CGameMode &gameMode) {
     initializeGame(gameMode);
 
+    // Move the entities until the game is finished
     while ( !m_GameIsDone ) {
         updateGameState(0);
         m_Player.move(m_Map);
@@ -23,12 +24,15 @@ void CGame::run(const CGameMode &gameMode) {
         m_Ghost_3.move(m_Map, m_Player);
     }
 
+    // If the game ended and the player still has some lives left,
+    // then he must have won
     if (m_Player.m_Lives)
         playerWon();
     else
         playerLost();
+    refresh();    
 
-    // Pause the game for a bit after the player wins
+    // Pause the game for a bit after the game ends
     napms(3000);
 
     return;
@@ -41,6 +45,8 @@ void CGame::initializeGame(const CGameMode &gameMode) {
 
     setGameConfig(gameMode);
 
+    // Go through the whole map and take care of each tile
+    // -> check the tile, if it's an entity, set it's values, etc.
     for (size_t y = 0; y < m_Map.m_Height; y++) {
         for (size_t x = 0; x < m_Map.m_CharMap[y].size(); x++) {
             char entity = m_Map.m_CharMap[y][x];
@@ -58,12 +64,15 @@ void CGame::updateGameState(int berserkActive) {
     if(m_Player.m_IsBerserk)
         goBerserk();
 
+    // Choose the type of collision handler based on the current game state (normal / berserk)
     berserkActive ? handleBerserkCollision() : handleGhostCollision();
 
+    // Update the player's stats
     mvprintw(m_Map.m_Height + 1, 0, "Score: %d", m_Player.m_Score);
     mvprintw(m_Map.m_Height + 2, 0, "Lives: %d", m_Player.m_Lives);
-    
-    m_GameIsDone = (m_Player.m_Score == m_ScoreToWin) || (m_Player.m_Lives == 0);
+
+    // Check if the player has won or is dead
+    m_GameIsDone = (m_Player.m_Score >= m_ScoreToWin) || (m_Player.m_Lives == 0);
 
     reloadMap();
 }
@@ -82,6 +91,8 @@ void CGame::handleGhostCollision() {
     m_Player.m_Lives--;
     m_Player.m_PrevDirection = 'n';
 
+    // After the is a collision between the player and a ghost,
+    // set all entities into their initial positions and reset their directions
     setEntityAfterCollision();
 
     // Give a player a little time to react after a collision
@@ -96,7 +107,8 @@ int CGame::checkGhostCollision() {
     //                                            UP     DOWN    LEFT     RIGHT   SAME
 
     int whichGhost = 1;
-    // Make a vector of ghosts all possible adjacent positions
+    // Make a vector of ghost's all possible adjacent positions
+    // Also, keep track of which ghost the current position belongs to
     for (const auto &ghost : ghosts) {
         for (const auto& direction : directions) {
                 size_t y = ghost->m_Position.first + direction.first;
@@ -110,7 +122,7 @@ int CGame::checkGhostCollision() {
     for (const auto& adjacent : ghostsAdjacentPositions) {
         if (m_Player.m_Position == adjacent.first)
             return adjacent.second; // There is a collision between the player and a ghost
-                                    //   -> return the id of ghost in the collision
+                                    //   -> return the id of the ghost in the collision
     }
 
     // There is no collision
@@ -123,8 +135,11 @@ void CGame::setEntityAfterCollision(int whichEntity) {
     vector<CEntity*> entities = {&m_Player, &m_Ghost_1, &m_Ghost_2, &m_Ghost_3};
 
     int counter = -1;
+    // Go through all entities and check if they are supposed to be set
     for (auto entity : entities) {
         counter++;
+        // Check if the entity should be set or not based on the [in]param of the method
+        // Skip the entity if it is not supposed to be set
         if (counter != whichEntity && whichEntity != -1)
             continue;
 
@@ -132,6 +147,7 @@ void CGame::setEntityAfterCollision(int whichEntity) {
         size_t x = entity->m_Position.second;
         entity->m_Direction = 'n';
         entity->m_Position = entity->m_InitialPosition;
+        // Refresh the tile after removing the entity from it
         char tile = m_Map.m_CharMap[y][x];
         entity->formatTile(tile);
         mvaddch(y, x, tile);
@@ -141,8 +157,14 @@ void CGame::setEntityAfterCollision(int whichEntity) {
 void CGame::handleBerserkCollision() {
 
     if ( int numOfGhost = checkGhostCollision() ) {
-        m_ScoreToWin += 20;
-        m_Player.m_Score += 20;
+        // Add score points to the player's score,
+        // and multiply it by number of eaten ghosts in one berserk run
+        // If the player has eaten all the ghosts, don't add any more score points
+        if ( m_EatenGhosts < 3) {
+            m_EatenGhosts++;
+            m_ScoreToWin += 20 * m_EatenGhosts;
+            m_Player.m_Score += 20 * m_EatenGhosts;
+        }
         setEntityAfterCollision(numOfGhost);
     }
     
@@ -158,6 +180,7 @@ void CGame::goBerserk() {
     attroff(A_REVERSE);
     reloadMap();
 
+    // Kep track of the berserk mode duration
     auto prevTime    = m_Player.m_PreviousTime = steady_clock::now();
     auto curTime     = m_Player.m_CurrentTime  = steady_clock::now();
     auto elapsedTime = duration_cast<milliseconds>(curTime - prevTime);
@@ -184,12 +207,13 @@ void CGame::goBerserk() {
         m_Ghost_2.move(m_Map, m_Player);
         m_Ghost_3.move(m_Map, m_Player);
 
+        // Update the current time spent in the berserk mode 
         curTime = steady_clock::now();
         elapsedTime = duration_cast<milliseconds>(curTime - prevTime);
     }
 
     move(y, x);
-    clrtoeol(); // Clear the berserk active text
+    clrtoeol(); // Clear the 'berserk mode active' text
 
     // Set back the default ghosts colors
     m_Ghost_1.m_EntityLook = 5;
@@ -199,6 +223,7 @@ void CGame::goBerserk() {
         // Speed up the ghosts after the end of the berserk mode
         ghost->m_Speed -= milliseconds(slowGhost);
     }
+    m_EatenGhosts = 0;
 }
 
 void CGame::setEntities(char entity, size_t y, size_t x) {
@@ -241,14 +266,12 @@ void CGame::playerWon() const {
     attron(A_STANDOUT);
     mvprintw(m_Map.m_Height + 4, m_Map.m_Width/2 - 4, "YOU WON!");
     attroff(A_STANDOUT);
-    refresh();
 }
 
 void CGame::playerLost() const {
     attron(A_STANDOUT);
     mvprintw(m_Map.m_Height + 4, m_Map.m_Width/2 - 10, "YOU LOST, BETTER LUCK NEXT TIME.");
     attroff(A_STANDOUT);
-    refresh();
 }
 
 void CGame::setGameConfig(const CGameMode &gameMode) {
