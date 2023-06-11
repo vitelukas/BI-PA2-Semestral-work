@@ -52,7 +52,7 @@ string CLeaderBoard::getPlayerName() const {
     char ch = 'n';
     string playerName;
     size_t x, y, xOffset;
-	xOffset = (getmaxx(stdscr)/2) - 4;
+	xOffset = (getmaxx(stdscr)/2) - 10;
     x = xOffset + 7;
     y = 6;
 
@@ -62,6 +62,8 @@ string CLeaderBoard::getPlayerName() const {
 
 	move(y, x);
 	curs_set(1);
+
+    flushinp(); // Clear the input buffer
 
     while (true) {
         ch = getch();

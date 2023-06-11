@@ -8,14 +8,38 @@
 
 #pragma once
 
+/**
+ * @class CLeaderBoard
+ * @brief Represents a leaderboard for a game.
+ * 
+ * This class allows displaying the leaderboard and making entries into the leaderboard.
+ */
 class CLeaderBoard {
 	public:
-        CLeaderBoard();
+		/**
+		 * @brief Constructs a new CLeaderBoard object.
+		 */
+		CLeaderBoard();
 
+		/**
+		 * @brief Displays the leaderboard.
+		 * 
+		 * @throw runtime_error If the leaderboard file cannot be opened.
+		 */
 		void showLeaderboard() const;
 
-		void makeEntry(int) const;
+		/**
+		 * @brief Makes an entry in the leaderboard.
+		 * @param playerScore The score of the player to be entered.
+		 * 
+		 * @throw runtime_error If the leaderboard file cannot be opened.
+		 */
+		void makeEntry(int playerScore) const;
 
+		/**
+		 * @brief Retrieves the name of the player from the input.
+		 * @return The name of the player.
+		 */
 		std::string getPlayerName() const;
 	
 	private:

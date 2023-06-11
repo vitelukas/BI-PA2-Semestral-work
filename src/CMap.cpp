@@ -58,9 +58,8 @@ void CMap::printMap() const {
 
 	// Check if the map can fit the screen
     if (m_Height > maxY || m_Width > maxX) {
-        endwin();
-        cerr << "Cannot show map - map is bigger than the screen." << endl;
-        return;
+		cerr << "Error while printing the map file!" << endl;
+        throw runtime_error("Cannot show map - map is bigger than the screen.");
     }
 
 	for (size_t y = 0; y < m_Height; y++) {

@@ -99,7 +99,7 @@ void CPlayer::mvRight(CMap &gameMap) {
 
 void CPlayer::collectCoin(CMap &gameMap, pair<size_t, size_t> position) {
 	gameMap.m_CharMap[position.first][position.second] = ' ';
-	m_Score++;
+	++m_Score;
 }
 
 bool CPlayer::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> position) {

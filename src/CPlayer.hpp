@@ -5,69 +5,69 @@
 class CPlayer : public CEntity {
 	public:
 		/**
-		 * Default constructor.
+		 * @brief Default constructor.
 		 */
 		CPlayer();
 
 		/**
-		 * Virtual destructor.
+		 * @brief Virtual destructor.
 		 */
 		virtual ~CPlayer() = default;
 
 		/**
-		 * Move the player entity on the game map.
+		 * @brief Move the player entity on the game map.
 		 *
 		 * @param map Reference to the game map object.
 		 */
 		void move(CMap& map);
 
 		/**
-		 * Override method to decide the movement direction of the player entity.
+		 * @brief Override method to decide the movement direction of the player entity.
 		 *
 		 * @param map Reference to the game map object.
-		 * @param entity Reference to the entity object serving for move decision.
+		 * @param entity Reference to the entity object which will be considered for move decision.
 		 */
 		virtual void decideMoveDirection(CMap& map, const CEntity& entity) override;
 
 		/**
-		 * Override method to move the player entity upwards on the game map.
+		 * @brief Override method to move the player entity upwards on the game map.
 		 *
 		 * @param map Reference to the game map object.
 		 */
 		virtual void mvUp(CMap& map) override;
 
 		/**
-		 * Override method to move the player entity downwards on the game map.
+		 * @brief Override method to move the player entity downwards on the game map.
 		 *
 		 * @param map Reference to the game map object.
 		 */
 		virtual void mvDown(CMap& map) override;
 
 		/**
-		 * Override method to move the player entity to the left on the game map.
+		 * @brief Override method to move the player entity to the left on the game map.
 		 *
 		 * @param map Reference to the game map object.
 		 */
 		virtual void mvLeft(CMap& map) override;
 
 		/**
-		 * Override method to move the player entity to the right on the game map.
+		 * @brief Override method to move the player entity to the right on the game map.
 		 *
 		 * @param map Reference to the game map object.
 		 */
 		virtual void mvRight(CMap& map) override;
 
 		/**
-		 * Override method to check for collisions between the player entity and the game map - walls, corridors, teleports, cherries, coins.
+		 * @brief Override method to check for collisions between the player entity and the game map - walls, corridors, teleports, cherries, coins.
 		 *
 		 * @param map Reference to the game map object.
-		 * @param position Pair representing the position which will be checked collisions.
+		 * @param position Pair representing the position which will be checked for collisions.
 		 * @return True if a collision occurs, False otherwise.
 		 */
 		virtual bool checkIfCollisions(CMap& map, pair<size_t, size_t> position) override;
 
 		/**
-		 * Collect a coin/cherry from the game map at the specified position and increase the player's score.
+		 * @brief Collect a coin/cherry from the game map at the specified position and increase the player's score.
 		 *
 		 * @param map Reference to the game map object.
 		 * @param position Pair representing the position of the coin to collect.

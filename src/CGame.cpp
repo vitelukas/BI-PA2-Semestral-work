@@ -5,7 +5,7 @@ using namespace std::chrono;
 #define MAP_FILE "examples/maps/main_map.txt"
 
 CGame::CGame() 
-    : m_GameMode(1), m_GameIsDone(false), m_ScoreToWin(0) 
+    : m_GameMode(1), m_GameIsDone(false), m_ScoreToWin(0), m_EatenGhosts(0)
 {
 }
 
@@ -27,8 +27,9 @@ void CGame::run(const CGameMode &gameMode) {
         playerWon();
     else
         playerLost();
+    refresh();    
 
-    // Pause the game for a bit after the player wins
+    // Pause the game for a bit after the game ends
     napms(3000);
 
     return;
@@ -63,7 +64,7 @@ void CGame::updateGameState(int berserkActive) {
     mvprintw(m_Map.m_Height + 1, 0, "Score: %d", m_Player.m_Score);
     mvprintw(m_Map.m_Height + 2, 0, "Lives: %d", m_Player.m_Lives);
     
-    m_GameIsDone = (m_Player.m_Score == m_ScoreToWin) || (m_Player.m_Lives == 0);
+    m_GameIsDone = (m_Player.m_Score >= m_ScoreToWin) || (m_Player.m_Lives == 0);
 
     reloadMap();
 }
@@ -141,8 +142,11 @@ void CGame::setEntityAfterCollision(int whichEntity) {
 void CGame::handleBerserkCollision() {
 
     if ( int numOfGhost = checkGhostCollision() ) {
-        m_ScoreToWin += 20;
-        m_Player.m_Score += 20;
+        if ( m_EatenGhosts < 3) {
+            m_EatenGhosts++;
+            m_ScoreToWin += 20 * m_EatenGhosts;
+            m_Player.m_Score += 20 * m_EatenGhosts;
+        }
         setEntityAfterCollision(numOfGhost);
     }
     
@@ -199,6 +203,7 @@ void CGame::goBerserk() {
         // Speed up the ghosts after the end of the berserk mode
         ghost->m_Speed -= milliseconds(slowGhost);
     }
+    m_EatenGhosts = 0;
 }
 
 void CGame::setEntities(char entity, size_t y, size_t x) {
@@ -241,14 +246,12 @@ void CGame::playerWon() const {
     attron(A_STANDOUT);
     mvprintw(m_Map.m_Height + 4, m_Map.m_Width/2 - 4, "YOU WON!");
     attroff(A_STANDOUT);
-    refresh();
 }
 
 void CGame::playerLost() const {
     attron(A_STANDOUT);
     mvprintw(m_Map.m_Height + 4, m_Map.m_Width/2 - 10, "YOU LOST, BETTER LUCK NEXT TIME.");
     attroff(A_STANDOUT);
-    refresh();
 }
 
 void CGame::setGameConfig(const CGameMode &gameMode) {
