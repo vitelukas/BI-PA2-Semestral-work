@@ -2,10 +2,8 @@
 using namespace std;
 using namespace std::chrono;
 
-#define MAP_FILE "examples/maps/main_map.txt"
-
 CGame::CGame() 
-    : m_GameMode(1), m_GameIsDone(false), m_ScoreToWin(0), m_EatenGhosts(0)
+    : m_GameMode(1), m_GameIsDone(false), m_ScoreToWin(0), m_EatenGhosts(0), m_MapFile("examples/maps/main_map.txt")
 {
 }
 
@@ -41,7 +39,7 @@ void CGame::run(const CGameMode &gameMode) {
 void CGame::initializeGame(const CGameMode &gameMode) {
     clear();   
 
-    m_Map.loadMap(MAP_FILE);
+    m_Map.loadMap(m_MapFile);
 
     setGameConfig(gameMode);
 

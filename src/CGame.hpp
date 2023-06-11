@@ -105,6 +105,7 @@ class CGame {
 		int m_GameMode;
 		bool m_GameIsDone;
 		unsigned int m_ScoreToWin, m_EatenGhosts;
+		std::string m_MapFile;
 		CMap m_Map;	
 		CPlayer m_Player;
 		CGhost_1 m_Ghost_1;

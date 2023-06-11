@@ -195,8 +195,11 @@ void CMainMenu::initialPrint() const {
 void CMainMenu::loadConfig(const string &fileName) {
     ifstream configFile(fileName);
     string line;
+    string mapFile;
     int lives, entitySpeed, ghostSlower, berserkDuration;
     int numOfLines = 0;
+    bool mapFlag, easyFlag, mediumFlag, hardFlag;
+    mapFlag = easyFlag = mediumFlag = hardFlag = false;
 
     if ( !configFile.is_open() ) {
 		cerr << "Error while opening the config file!" << endl;
@@ -213,20 +216,33 @@ void CMainMenu::loadConfig(const string &fileName) {
         istringstream iss(line);
 
         // Store the values in appropriate object attributes
-        if (line.find("Easy") != string::npos) {          // Handle Easy game mode 
+        if (line.find("Map") != string::npos) {          // Handle Easy game mode 
+            getAttributes(configFile, iss, numOfLines);
+            iss >> mapFile;
+            m_Game.m_MapFile = mapFile;
+            m_PlayEasy.setAttributes(lives, entitySpeed, ghostSlower, berserkDuration);
+            mapFlag = true;
+        }
+        else if (line.find("Easy") != string::npos) {          // Handle Easy game mode 
             getAttributes(configFile, iss, numOfLines);
             iss >> lives >> entitySpeed >> ghostSlower >> berserkDuration;
+            checkAttrs(iss, lives, entitySpeed, ghostSlower, berserkDuration);
             m_PlayEasy.setAttributes(lives, entitySpeed, ghostSlower, berserkDuration);
+            easyFlag = true;
         } 
         else if (line.find("Medium") != string::npos) {   // Handle Medium game mode
             getAttributes(configFile, iss, numOfLines);
             iss >> lives >> entitySpeed >> ghostSlower >> berserkDuration;
+            checkAttrs(iss, lives, entitySpeed, ghostSlower, berserkDuration);
             m_PlayMedium.setAttributes(lives, entitySpeed, ghostSlower, berserkDuration);
+            mediumFlag = true;
         } 
         else if (line.find("Hard") != string::npos) {     // Handle Hard game mode
             getAttributes(configFile, iss, numOfLines);
             iss >> lives >> entitySpeed >> ghostSlower >> berserkDuration;
+            checkAttrs(iss, lives, entitySpeed, ghostSlower, berserkDuration);
             m_PlayHard.setAttributes(lives, entitySpeed, ghostSlower, berserkDuration);
+            hardFlag = true;
         }
         numOfLines++;
 
@@ -237,7 +253,32 @@ void CMainMenu::loadConfig(const string &fileName) {
 
     configFile.close();
 
+    if ( !(mapFlag && easyFlag && mediumFlag && hardFlag) ) {
+        cerr << "Error while loading the config file!" << endl;
+		throw runtime_error("The config file doesn't have the right structure: at least one game mode specification is missing!");
+    }
+
     return;
+}
+
+void CMainMenu::checkAttrs(istringstream &iss, const int &lives, const int &entitySpeed, const int &ghostSlower, const int &berserkDuration) {
+    // Check if the loading failed - if it failed the format of the values was incorrect or atleast one of the values was missing
+    if ( iss.fail() ) {
+        cerr << "Error while loading attribute values!" << endl;
+		throw runtime_error("Error while loading attribute values: not all values were specified, or the values are not numbers!");
+    }
+
+    if ( lives < 0 || entitySpeed < 0 || ghostSlower < 0 || berserkDuration < 0 ) {
+        cerr << "Error while loading attribute values!" << endl;
+		throw runtime_error("Error while loading attribute values: the attribute values cannot have negative value!");
+    }
+
+    int dummy;
+    if (iss >> dummy) {
+        cerr << "Error while loading attribute values!" << endl;
+        throw runtime_error("Error while loading attribute values: too many attributes!");
+    }  
+
 }
 
 void CMainMenu::getAttributes(ifstream &configFile, istringstream &iss, int &numOfLines) {

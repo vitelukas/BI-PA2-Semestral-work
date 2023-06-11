@@ -88,6 +88,10 @@ string CLeaderBoard::getPlayerName() const {
         }
 
 
+        if (playerName.size() >= 40) {
+            break;
+        }
+
         move(y, 0);
         clrtoeol();                     // Clear the whole line before printing the name again
         move(y, 0);

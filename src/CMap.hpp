@@ -59,7 +59,14 @@ class CMap {
 		 * The map is printed within the screen boundaries.
 		 */
 		void printMap() const;
+
+		/**
+		 * @brief Check if the loaded map if valid or not.
+		 * @return Returns true if the map is ok and valid, false otherwise.
+		 */
+		bool checkMapValidity();
 	
+
 	public:
 		size_t m_Height, m_Width;
 

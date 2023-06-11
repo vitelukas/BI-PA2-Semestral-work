@@ -1,5 +1,5 @@
 -Map-
-examples/maps/main_map.txt
+1111
 -Easy-
 3 160 200 6000
 -Medium-
