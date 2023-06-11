@@ -82,6 +82,18 @@ class CMainMenu {
 		 */
 		void getAttributes(ifstream &configFile, istringstream &iss, int &numOfLines);
 
+		/**
+		 * @brief Check the validity of the loaded attributes;
+		 * @param iss Reference to an input string stream for storing the variable values.
+		 * @param lives The number of lives for the player.
+		 * @param entitySpeed The speed of the entities in the game.
+		 * @param ghostSlower The speed of the ghosts in the game.
+		 * @param berserkDuration The duration of the berserker mode in the game.
+		 *
+		 * This method checks if the attributes have to correct format and if all the attributes were loaded.
+		 * The function throws an exception if something fails.
+		 */
+		void checkAttrs(istringstream &iss, const int &lives, const int &entitySpeed, const int &ghostSlower, const int &berserkDuration);
 
 		/**
 		 * @brief Determines the final game mode(which will be then passed to the game, as an object), based on the currently set game mode.

@@ -1,7 +1,7 @@
 -Map-
 examples/maps/main_map.txt
 -Easy-
-3 160 200 6000
+3 160 200 6000 123456789
 -Medium-
 2 160 100 4500
 -Hard-

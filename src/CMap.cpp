@@ -8,15 +8,16 @@ CMap::CMap()
 {
 	m_TeleportIn = m_TeleportOut = make_pair(SIZE_MAX, SIZE_MAX);
 	m_AsciiToSymbolMap = {
+        {'#', '#'},
         {'p', 'O'},
         {'&', '&'},
         {'@', '@'},
         {'0', '0'},
         {'B', 'B'},
         {'.', '.'},
+        {'T', 'T'},
 	};
 
-	// init_color(COLOR_BLUE, 000, 000, 600 );
 	init_pair(1, COLOR_BLUE, COLOR_BLUE);	// wall default color
 	init_pair(2, COLOR_YELLOW, -1); 		// coinf default color 		(-1 == use the default color for background)
 	init_pair(3, COLOR_RED, -1);			// Cherry default color
@@ -48,8 +49,12 @@ void CMap::loadMap(const string &fileName) {
 	mapFile.close();
 
 	// Set the map height and width based on the size of the map loaded from the file
-	m_Height = m_CharMap.size();
-	m_Width = m_CharMap[0].size();
+	if ( !m_CharMap.empty() ) {
+		m_Height = m_CharMap.size();
+		m_Width = m_CharMap[0].size();
+	}
+
+	checkMapValidity();
 }
 
 void CMap::printMap() const {
@@ -112,4 +117,42 @@ void CMap::transformMap(char tile, size_t y, size_t x) {
 		m_CharMap[y][x] = it->second;
 	else
 		m_CharMap[y][x] = tile;
+}
+
+bool CMap::checkMapValidity() {
+	bool pFlag, g1Flag, g2Flag, g3Flag;
+	pFlag = g1Flag = g2Flag = g3Flag = false;
+	std::unordered_map<char, int> entityCounts;
+
+	if ( m_CharMap.empty() ) {
+		cerr << "Error while loading the map file!" << endl;
+		throw runtime_error("Wrong format of the map: the map is empty!");
+	}
+
+	for (size_t y = 0; y < m_Height; y++) {
+        for (size_t x = 0; x < m_CharMap[y].size(); x++) {
+            char tile = m_CharMap[y][x];
+			if ( (m_AsciiToSymbolMap.find(tile) == m_AsciiToSymbolMap.end()) && !isspace(tile) ) {
+				cerr << "Error while loading the map file!" << endl;
+				throw runtime_error("Wrong format of the map: unspecified char/entity");
+			}
+			else {
+				// Increment the count of the entity
+                entityCounts[tile]++;
+			}	
+		}
+	}
+
+	// Check if entities are present in the map and if there are duplicates or not
+    pFlag = entityCounts['p'] == 1;
+    g1Flag = entityCounts['0'] == 1;
+    g2Flag = entityCounts['&'] == 1;
+    g3Flag = entityCounts['@'] == 1;
+
+	if ( !(pFlag && g1Flag && g2Flag && g3Flag) ) {
+		cerr << "Error while loading the map file!" << endl;
+		throw runtime_error("Wrong format of the map: wrong entity count");
+	}
+
+    return true;
 }
