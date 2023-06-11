@@ -35,6 +35,7 @@ void CMap::loadMap(const string &fileName) {
 		throw runtime_error("Failed to open the map file.");
 	}
 	
+	// Load the map from the file into the map structure variable
 	string line;
 	while (getline(mapFile, line)) {
 		vector<char> mapRow;
@@ -46,6 +47,7 @@ void CMap::loadMap(const string &fileName) {
 
 	mapFile.close();
 
+	// Set the map height and width based on the size of the map loaded from the file
 	m_Height = m_CharMap.size();
 	m_Width = m_CharMap[0].size();
 }
@@ -56,12 +58,13 @@ void CMap::printMap() const {
 	size_t maxY, maxX;
     getmaxyx(stdscr, maxY, maxX);
 
-	// Check if the map can fit the screen
+	// Check if the map can fit into the screen, throw an exception if not
     if (m_Height > maxY || m_Width > maxX) {
 		cerr << "Error while printing the map file!" << endl;
         throw runtime_error("Cannot show map - map is bigger than the screen.");
     }
 
+	// Print the map into the screen and color the individual tiles / entities accordingly
 	for (size_t y = 0; y < m_Height; y++) {
         for (size_t x = 0; x < m_CharMap[y].size(); x++) {
 			char ch = m_CharMap[y][x];
@@ -101,6 +104,7 @@ void CMap::printMap() const {
     refresh();
 }
 
+// Transform the original map according to the the user specified symbols set in the m_AsciiToSymbolMap attribute
 void CMap::transformMap(char tile, size_t y, size_t x) {
 	auto it = m_AsciiToSymbolMap.find(tile);	
 

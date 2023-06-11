@@ -56,6 +56,7 @@ void CGhost_2::findShortestPath(CMap& gameMap, const CEntity& player, size_t &ne
             pair<size_t, size_t> current = q.front();
             q.pop();
 
+            // Break the algorithm if we found the shortest path to the player's position
             if (current == playersPosition)
                 break;
 
@@ -65,6 +66,7 @@ void CGhost_2::findShortestPath(CMap& gameMap, const CEntity& player, size_t &ne
                 size_t x = current.second + neighbor.second;
                 size_t y = current.first + neighbor.first;
 
+                // Check if all the adjacent cells are valid and the ghost can move there
                 if ( !CEntity::checkIfCollisions(gameMap, {y, x}) && !visited[y][x] ) {
                     q.push({y, x});
                     visited[y][x] = true;
@@ -75,6 +77,7 @@ void CGhost_2::findShortestPath(CMap& gameMap, const CEntity& player, size_t &ne
 
         // If the queue is empty and player's position is not reached, break the do while loop (BFS algorithm)
         if (q.empty()) {
+            // Set the next position to the current position so that the ghost will move in his current direction
             nextRow = m_Position.first;
             nextCol = m_Position.second;
             break;

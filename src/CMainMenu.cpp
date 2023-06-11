@@ -15,9 +15,12 @@ CMainMenu::CMainMenu() {
 }
 
 int CMainMenu::run(int gameMode) {
+    // Load the variable values from the config file
     loadConfig(CONFIG_FILE);
+    // Set the previous game mode
     m_Game.m_GameMode = gameMode;
     char getInput;
+    // -1 == wait until there is an input from user
     timeout(-1);
     
     initialPrint();
@@ -37,7 +40,9 @@ int CMainMenu::run(int gameMode) {
         else if( getInput == 's') {
             m_CursorPos++;
         }
-
+        
+        // Switch the cursor position to the last, respectively first position,
+        // if the cursor position underflows / overflows the menu item list
         if (m_CursorPos < m_MenuItemStart) {
 			m_CursorPos = m_MenuItemEnd;
 		}
@@ -45,7 +50,7 @@ int CMainMenu::run(int gameMode) {
 			m_CursorPos = m_MenuItemStart;
 		}
 
-        // Choose what action should be performed based on the cursor position
+        // Choose what action should be performed based on the current cursor position
         if (getInput == '\n') {
             if ( m_CursorPos == m_MenuItemStart ) {
                 decideFinalGameMode();
@@ -67,6 +72,7 @@ int CMainMenu::run(int gameMode) {
                 initialPrint();
             } 
             else if( m_CursorPos == m_MenuItemEnd ) {
+                // Return 0 == dont't run the main menu again
                 return 0;
             }
         }
@@ -74,6 +80,7 @@ int CMainMenu::run(int gameMode) {
     clear();
 }
 
+// Update the currently highlighted menu item (based on the current cursor position)
 void CMainMenu::update() const {
     int y = m_CursorPos;
     int x = m_xOffset;
@@ -121,6 +128,7 @@ void CMainMenu::chooseDifficulty() {
     mvprintw(positionMedium, m_Width/2 - 3, "MEDIUM");
     mvprintw(positionHard, m_Width/2 - 2, "HARD");
 
+    // Stay in the choose difficulty menu, until the user chooses a difficulty
     while(true){
         mvprintw(choice, m_Width/2 - 6, ">> ");
         refresh();
@@ -135,6 +143,8 @@ void CMainMenu::chooseDifficulty() {
             choice += 2;
         }
 
+        // Switch the choice(cursor position) to the last, respectively first position,
+        // if the cursor position underflows / overflows the menu item list
         if (choice < positionEasy) {
 			choice = positionHard;
 		}
@@ -193,6 +203,7 @@ void CMainMenu::loadConfig(const string &fileName) {
 		throw runtime_error("Failed to open the config file.");
 	}
 
+    // Read the confif file while there are lines to be processed
     while (getline(configFile, line)) {
         // Skip empty lines or lines starting with '#' == comment line
         if (line.empty() || line[0] == '#')
@@ -219,6 +230,7 @@ void CMainMenu::loadConfig(const string &fileName) {
         }
         numOfLines++;
 
+        // If the config file is too long, stop loading
         if (numOfLines >= 500)
             break;
     }

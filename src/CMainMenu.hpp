@@ -84,7 +84,7 @@ class CMainMenu {
 
 
 		/**
-		 * @brief Determines the final game mode(which will be than passed to the game, as an object), based on the currently set game mode.
+		 * @brief Determines the final game mode(which will be then passed to the game, as an object), based on the currently set game mode.
 		 */
 		void decideFinalGameMode();
 

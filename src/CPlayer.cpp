@@ -28,16 +28,20 @@ void CPlayer::move(CMap & gameMap) {
 	timeout(0);
 	int userInput = tolower(getch());
 
-	if (userInput != ERR ) {
+	// If the user inputed something, and the input is valid, update the player's direction
+	if ( userInput != ERR && (userInput == 'w' || userInput == 's' || userInput == 'a' || userInput == 'd') ) {
 		m_PrevDirection = m_Direction;
 		m_Direction = userInput;
 	}
 
+	// Check if enough time elapsed since the last move, if yes, move in the current direction
 	if (elapsedTime >= m_Speed) {
 		mvaddch(m_Position.first, m_Position.second, ' ');
 		
 		decideMoveDirection(gameMap, *this);
 
+		// If the position remained the same, the user must have hit a wall,
+		// -> reset his direction to the previous one and then move based on the previous direction
 		if (m_Position == prevPosition) {
 			m_Direction = m_PrevDirection;
 			decideMoveDirection(gameMap, *this);
@@ -47,7 +51,6 @@ void CPlayer::move(CMap & gameMap) {
         m_PreviousTime = m_CurrentTime;
     }
 	
-	// TODO - make attr variable for player character so that it will be formated automatically
 	attron(COLOR_PAIR(4));
 	mvaddch(m_Position.first, m_Position.second, m_Character);
 	attroff(COLOR_PAIR(4));

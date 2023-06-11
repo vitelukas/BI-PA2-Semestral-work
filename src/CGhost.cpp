@@ -25,15 +25,20 @@ void CGhost::move(CMap& gameMap, const CPlayer& player) {
 	m_CurrentTime = steady_clock::now();
     auto elapsedTime = duration_cast<milliseconds>(m_CurrentTime - m_PreviousTime).count();
 
+	// Check if the time and decide whether to already move the ghost or not
     if (elapsedTime < m_Speed.count() + m_GhostSlower) {
         return;
 	}
 
+	// Set the seed for random generation based on the current time
 	srand(time(0));
+
+	// Format the tile the ghost is moving form so that he won't disrupt it
 	char tile = gameMap.m_CharMap[m_Position.first][m_Position.second];
 	formatTile(tile);
     mvaddch(m_Position.first, m_Position.second, tile);
 
+	// If the player is in berserk mode, run away from him by choosing a random direction
 	if (player.m_IsBerserk) {
 		chooseRandomMove(gameMap);
 	} else {
@@ -107,6 +112,7 @@ void CGhost::mvRight(CMap& gameMap) {
 	}
 }
 
+// Explained in CEntity
 bool CGhost::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> futurePosition) {
     vector<vector<char>> map = gameMap.m_CharMap;
 	char futureDirection = determineDirection(futurePosition);
@@ -120,14 +126,15 @@ bool CGhost::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> futurePositio
 		else
 			m_Position = gameMap.m_TeleportIn;
     }
-
+	// Additionaly check if moving to the future position would result in turning around and going backwards
 	return ( corridorCollision(map, futurePosition) || !checkDirectionOK(futureDirection) );
 }
 
 bool CGhost::checkDirectionOK(char futureDirection) const {
 	int dirToNum = m_DirectionsTable.at(m_Direction);
 	char bannedDirection = m_BackDirections.at(dirToNum);
-
+	
+	// Compare the future direction with the banned direction for the current direction
 	return !(bannedDirection == futureDirection);
 }
 

@@ -14,21 +14,22 @@ void CLeaderBoard::makeEntry(int playerScore) const {
         throw runtime_error("Failed to open the leaderboard file.");
     }
 
-    // Read existing entries and store them in a vector
-    vector<pair<string, int>> leaderboardEntries;
+    // Read the existing entries and store them in a vector of name-score pairs
     string line;
+    vector<pair<string, int>> leaderboardEntries;
     while (getline(inputFile, line)) {
+        // Store the individual informationions into the variables
         stringstream ss(line);
         string name;
         int score;
-		string dummy;
+		string dummy;   // dummy is a variable for storing the place of the player (it will be updated later)
         ss >> dummy >> name >> score;
-		name.pop_back(); // remove the ":"
+		name.pop_back(); // remove the ":" from the name
         leaderboardEntries.emplace_back(name, score);
     }
     inputFile.close();
 
-    // Insert the new entry in the correct position
+    // Insert the new entry into the leaderboard and sort the leaderboard
     leaderboardEntries.emplace_back(playerName, playerScore);
     sort(leaderboardEntries.begin(), leaderboardEntries.end(), [](const auto& a, const auto& b) {
         return a.second > b.second; // Sort in descending order based on score
@@ -65,6 +66,7 @@ string CLeaderBoard::getPlayerName() const {
 
     flushinp(); // Clear the input buffer
 
+    // Kep processing the players username until he confirms it by pressing enter
     while (true) {
         ch = getch();
 
@@ -78,8 +80,8 @@ string CLeaderBoard::getPlayerName() const {
                 playerName.pop_back();  // Remove the last character if backspace was pressed and the name is not empty
             }
         } 
-        else if ( !isspace(ch) && (isalnum(ch) || isspace(ch) || ch == '_') ) {
-            playerName.push_back(ch);   // Append alphanumeric characters and spaces to the player's name
+        else if ( !isspace(ch) && (isalnum(ch) || ch == '_') ) {
+            playerName.push_back(ch);   // Append only alphanumeric characters and underscores to the player's name
         }
         else {
             mvprintw(y + 10, x - 17, "Only alnum chars and underscore(_) are allowed.");
@@ -129,5 +131,6 @@ void CLeaderBoard::showLeaderboard() const {
 	sourceFile.close();
 
 	refresh();
+    // Wait until the user presses a key before exiting
 	getch();
 }

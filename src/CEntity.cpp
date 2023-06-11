@@ -28,6 +28,7 @@ bool CEntity::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> futurePositi
 }
 
 bool CEntity::wallCollision(const CMap &gameMap, pair<size_t, size_t> position) const {
+	// Check it the position out of the map bounds or if there is a wall on this position
 	return position.second >= gameMap.m_Width -1 ||
 		   position.first >= gameMap.m_Height -1 ||
 		   gameMap.m_CharMap[position.first][position.second] == '#';
