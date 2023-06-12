@@ -1,8 +1,8 @@
 #include "CGhost_2.hpp"
 using namespace std;
 
-CGhost_2::CGhost_2() 
-	: CGhost() 
+CGhost_2::CGhost_2(int entityLook) 
+	: CGhost(entityLook) 
 {
     m_Character = '@';
     m_EntityLook = 6;

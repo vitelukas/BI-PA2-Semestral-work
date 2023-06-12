@@ -131,3 +131,11 @@ bool CPlayer::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> position) {
 
 	return ( corridorCollision(map, position) );
 }
+
+unsigned int CPlayer::getScore() const {
+	return m_Score;
+}
+
+bool CPlayer::getBerserk() const {
+	return m_IsBerserk;
+}

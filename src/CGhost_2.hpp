@@ -12,10 +12,12 @@
 class CGhost_2 : public CGhost {
 	public:
 		/**
-		 * @brief Default constructor for CGhost_2.
+		 * @brief Default constructor for CGhost_3.
+		 * @param entityLook Integer defining the number of coloring for the entity
 		 */
-		CGhost_2();
+		CGhost_2(int entityLook);
 
+	protected:
 		/**
 		 * @brief Overrided method to determine the next move direction for the ghost based on a shortest path algorithm
 		 * and a prediction of the player's movement.
@@ -26,6 +28,7 @@ class CGhost_2 : public CGhost {
 		 */
 		virtual void decideMoveDirection(CMap& gameMap, const CEntity& player) override;
 
+	private:
 		/**
 		 * @brief Finds the shortest path from the ghost to the predicted future position of the player.
 		 * @param gameMap The game map.
@@ -38,6 +41,6 @@ class CGhost_2 : public CGhost {
 		 */
 		void findShortestPath(CMap& gameMap, const CEntity& player, size_t& nextRow, size_t& nextCol);
 
-	protected:
-		friend class CGame;
+	private:
+
 };

@@ -5,6 +5,9 @@ using namespace std::chrono;
 CGame::CGame() 
     : m_GameMode(1), m_GameIsDone(false), m_ScoreToWin(0), m_EatenGhosts(0), m_MapFile("examples/maps/main_map.txt")
 {
+    m_Ghosts.emplace_back(std::make_shared<CGhost_1>(5));
+    m_Ghosts.emplace_back(std::make_shared<CGhost_2>(6));
+    m_Ghosts.emplace_back(std::make_shared<CGhost_3>(7));
 }
 
 void CGame::run(const CGameMode &gameMode) {
@@ -15,11 +18,9 @@ void CGame::run(const CGameMode &gameMode) {
         updateGameState(0);
         m_Player.move(m_Map);
 
-        m_Ghost_1.move(m_Map, m_Player);
-
-        m_Ghost_2.move(m_Map, m_Player);
-
-        m_Ghost_3.move(m_Map, m_Player);
+        for (auto ghost : m_Ghosts) {
+            ghost->move(m_Map, m_Player);
+        }
     }
 
     // If the game ended and the player still has some lives left,
@@ -98,7 +99,6 @@ void CGame::handleGhostCollision() {
 }
 
 int CGame::checkGhostCollision() {
-    const vector<CGhost*> ghosts = {&m_Ghost_1, &m_Ghost_2, &m_Ghost_3};
     // Vector of positions and integers, representing to which ghost does the position belong to 
     vector< pair< pair<size_t,size_t>, int>> ghostsAdjacentPositions;
     vector< pair<size_t,size_t>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {0, 0}};
@@ -107,7 +107,7 @@ int CGame::checkGhostCollision() {
     int whichGhost = 1;
     // Make a vector of ghost's all possible adjacent positions
     // Also, keep track of which ghost the current position belongs to
-    for (const auto &ghost : ghosts) {
+    for (const auto &ghost : m_Ghosts) {
         for (const auto& direction : directions) {
                 size_t y = ghost->m_Position.first + direction.first;
                 size_t x = ghost->m_Position.second + direction.second;
@@ -130,7 +130,11 @@ int CGame::checkGhostCollision() {
 // If no specific id of an entity was sent to the method,
 // then set the arugment to the default value -1 == set all entities
 void CGame::setEntityAfterCollision(int whichEntity) {
-    vector<CEntity*> entities = {&m_Player, &m_Ghost_1, &m_Ghost_2, &m_Ghost_3};
+    vector<CEntity*> entities;
+    entities.push_back(&m_Player);
+    entities.push_back(m_Ghosts[0].get());
+    entities.push_back(m_Ghosts[1].get());
+    entities.push_back(m_Ghosts[2].get());
 
     int counter = -1;
     // Go through all entities and check if they are supposed to be set
@@ -172,7 +176,7 @@ void CGame::goBerserk() {
     m_Player.m_IsBerserk = false;
     auto y = m_Map.m_Height + 2;
     auto x = m_Map.m_Width - 20;
-    int slowGhost = m_Ghost_1.m_GhostSlower;
+    int slowGhost = m_Ghosts[0]->m_GhostSlower;
     attron(A_REVERSE);
     mvprintw(y, x, "Berserk mode active");
     attroff(A_REVERSE);
@@ -185,8 +189,7 @@ void CGame::goBerserk() {
 
     // Swap the ghosts direction to go back,
     // and set different color for ghosts, so that the player can see he can eat them
-    const vector<CGhost*> ghosts = {&m_Ghost_1, &m_Ghost_2, &m_Ghost_3};
-    for (auto ghost : ghosts) {
+    for (auto ghost : m_Ghosts) {
         ghost->m_EntityLook = 8;
         int numDir = ghost->m_DirectionsTable[ghost->m_Direction];
         ghost->m_Direction = ghost->m_BackDirections[numDir];
@@ -201,9 +204,9 @@ void CGame::goBerserk() {
         m_Player.move(m_Map);
 
         // Move ghosts in random directions;
-        m_Ghost_1.move(m_Map, m_Player);
-        m_Ghost_2.move(m_Map, m_Player);
-        m_Ghost_3.move(m_Map, m_Player);
+        for (auto ghost : m_Ghosts) {
+            ghost->CGhost::move(m_Map, m_Player);
+        }
 
         // Update the current time spent in the berserk mode 
         curTime = steady_clock::now();
@@ -213,11 +216,8 @@ void CGame::goBerserk() {
     move(y, x);
     clrtoeol(); // Clear the 'berserk mode active' text
 
-    // Set back the default ghosts colors
-    m_Ghost_1.m_EntityLook = 5;
-    m_Ghost_2.m_EntityLook = 6;
-    m_Ghost_3.m_EntityLook = 7;
-    for (auto ghost : ghosts) {
+
+    for (auto ghost : m_Ghosts) {
         // Speed up the ghosts after the end of the berserk mode
         ghost->m_Speed -= milliseconds(slowGhost);
     }
@@ -231,16 +231,16 @@ void CGame::setEntities(char entity, size_t y, size_t x) {
             m_Player.m_Character = m_Map.m_AsciiToSymbolMap['p'];
             break;
         case '&':
-            m_Ghost_1.m_Position = m_Ghost_1.m_InitialPosition = {y, x};
-            m_Ghost_1.m_Character = m_Map.m_AsciiToSymbolMap['&'];
+            m_Ghosts[0]->m_Position = m_Ghosts[0]->m_InitialPosition = {y, x};
+            m_Ghosts[0]->m_Character = m_Map.m_AsciiToSymbolMap['&'];
             break;
         case '@':
-            m_Ghost_2.m_Position = m_Ghost_2.m_InitialPosition = {y, x};
-            m_Ghost_2.m_Character = m_Map.m_AsciiToSymbolMap['@'];
+            m_Ghosts[1]->m_Position = m_Ghosts[1]->m_InitialPosition = {y, x};
+            m_Ghosts[1]->m_Character = m_Map.m_AsciiToSymbolMap['@'];
             break;
         case '0':
-            m_Ghost_3.m_Position = m_Ghost_3.m_InitialPosition = {y, x};
-            m_Ghost_3.m_Character = m_Map.m_AsciiToSymbolMap['0'];
+            m_Ghosts[2]->m_Position = m_Ghosts[2]->m_InitialPosition = {y, x};
+            m_Ghosts[2]->m_Character = m_Map.m_AsciiToSymbolMap['0'];
             break;
         case '.':
             ++m_ScoreToWin;
@@ -273,9 +273,8 @@ void CGame::playerLost() const {
 }
 
 void CGame::setGameConfig(const CGameMode &gameMode) {
-    vector<CGhost*> ghosts = {&m_Ghost_1, &m_Ghost_2, &m_Ghost_3};
 
-    for (auto ghost : ghosts) {
+    for (auto ghost : m_Ghosts) {
         ghost->m_GhostSlower = gameMode.m_GhostSpeed;
         ghost->m_Speed = milliseconds(gameMode.m_EntitySpeed);
     }

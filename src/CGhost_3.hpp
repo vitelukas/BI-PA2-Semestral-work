@@ -12,10 +12,12 @@ class CGhost_3 : public CGhost {
 	public:
 		/**
 		 * @brief Default constructor for CGhost_3.
+		 * @param entityLook Integer defining the number of coloring for the entity
 		 */
-		CGhost_3();
+		CGhost_3(int entityLook);
 
-		/**
+	protected:
+		/**	
 		 * @brief Overrides the base class's decideMoveDirection method to move towards the player based on his relative possition. 
 		 * @param gameMap The game map.
 		 * @param player The player entity.
@@ -26,6 +28,6 @@ class CGhost_3 : public CGhost {
 		 */
 		virtual void decideMoveDirection(CMap& gameMap, const CEntity& player) override;
 
-	protected:
-		friend class CGame;
+	private:
+
 };

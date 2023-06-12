@@ -60,17 +60,15 @@ class CMap {
 		 */
 		void printMap() const;
 
+	private:
 		/**
 		 * @brief Check if the loaded map if valid or not.
 		 * @return Returns true if the map is ok and valid, false otherwise.
 		 */
 		bool checkMapValidity();
 	
-
-	public:
-		size_t m_Height, m_Width;
-
 	private:
+		size_t m_Height, m_Width;
 		char m_CoinCharr;
 		std::vector<std::vector<char>> m_CharMap;   ///< The 2D vector representing the map.
 		std::unordered_map<char, char> m_AsciiToSymbolMap;  ///< Mapping between ASCII characters and symbols on the map.
@@ -80,4 +78,6 @@ class CMap {
 		friend class CEntity;
 		friend class CPlayer;
 		friend class CGhost;
+		friend class CGhost_1;
+		friend class CGhost_2;
 };

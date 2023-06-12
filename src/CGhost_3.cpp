@@ -1,8 +1,8 @@
 #include "CGhost_3.hpp"
 using namespace std;
 
-CGhost_3::CGhost_3() 
-	: CGhost()
+CGhost_3::CGhost_3(int entityLook) 
+	: CGhost(entityLook)
 {
     m_Character = '0';
     m_EntityLook = 7;

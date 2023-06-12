@@ -58,7 +58,7 @@ int CMainMenu::run(int gameMode) {
                 m_Game.run(m_FinalGameMode);
 
                 // Allow the user to sign the leaderboard after he finishes the game
-                m_LeaderBoard.makeEntry(m_Game.m_Player.m_Score);
+                m_LeaderBoard.makeEntry(m_Game.m_Player.getScore());
 
                 // return value 1 == start main menu again 
                 return m_Game.m_GameMode;

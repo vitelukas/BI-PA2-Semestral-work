@@ -27,5 +27,6 @@ class CGameMode {
 		int m_GhostSpeed;        // Speed of the ghosts
 		int m_PlayerLives;       // Number of lives for the player
 		int m_BerserkerDuration; // Duration of the berserker mode
-	protected:
+		
+	private:
 };

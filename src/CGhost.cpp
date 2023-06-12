@@ -2,8 +2,8 @@
 using namespace std;
 using namespace std::chrono;
 
-CGhost::CGhost()
-	:CEntity(), m_GhostSlower(60)
+CGhost::CGhost(int entityLook)
+	: CEntity(), m_GhostSlower(60)
 {
 	m_DirectionsTable = {
 		{'w', 0},
@@ -19,6 +19,8 @@ CGhost::CGhost()
         {3, 'a'},
         {4, 'x'},
 	};
+
+	m_EntityLook = entityLook;
 }
 
 void CGhost::move(CMap& gameMap, const CPlayer& player) {
@@ -39,7 +41,7 @@ void CGhost::move(CMap& gameMap, const CPlayer& player) {
     mvaddch(m_Position.first, m_Position.second, tile);
 
 	// If the player is in berserk mode, run away from him by choosing a random direction
-	if (player.m_IsBerserk) {
+	if (player.getBerserk()) {
 		chooseRandomMove(gameMap);
 	} else {
     	decideMoveDirection(gameMap, player);

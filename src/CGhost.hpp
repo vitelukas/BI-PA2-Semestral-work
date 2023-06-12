@@ -17,8 +17,10 @@ class CGhost : public CEntity {
 		/**
 		 * @brief Default constructor for CGhost.
 		 */
-		CGhost();
+		CGhost(int entityLook);
 
+	protected:
+		
 		/**
 		 * @brief Moves the ghost on the game map.
 		 * @param gameMap The game map.
@@ -105,6 +107,8 @@ class CGhost : public CEntity {
 		 */
 		char determineDirection(std::pair<size_t, size_t> futurePos) const;
 
+	private:
+	
 		/**
 		 * @brief Chooses a random move for the ghost.
 		 * @param gameMap The game map.

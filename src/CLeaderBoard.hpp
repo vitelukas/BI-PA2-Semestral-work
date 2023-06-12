@@ -36,6 +36,8 @@ class CLeaderBoard {
 		 */
 		void makeEntry(int playerScore) const;
 
+	private:
+	
 		/**
 		 * @brief Retrieves the name of the player from the input.
 		 * @return The name of the player.
