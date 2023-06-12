@@ -15,6 +15,23 @@ class CPlayer : public CEntity {
 		virtual ~CPlayer() = default;
 
 		/**
+		 * @brief Return the player's score.
+		 * @return The value of the player's score.
+		 * 
+		 */
+		unsigned int getScore() const;
+
+		/**
+		 * @brief Return the players berserk state.
+		 * @return The true if the player is in the berserk state, otherwise return false.
+		 * 
+		 */
+		bool getBerserk() const;
+
+
+	private:
+
+		/**
 		 * @brief Move the player entity on the game map.
 		 *
 		 * @param map Reference to the game map object.
@@ -74,15 +91,10 @@ class CPlayer : public CEntity {
 		 */
 		void collectCoin(CMap& map, pair<size_t, size_t> position);
 
-	protected:
+	private:
 		char m_PrevDirection;
 		bool m_IsBerserk;
 		unsigned int m_Lives, m_Score;
     	std::chrono::milliseconds m_BerserkDuration;
 		friend class CGame;
-		friend class CGhost;
-		friend class CGhost_1;
-		friend class CGhost_2;
-		friend class CGhost_3;
-		friend class CMainMenu;
 };

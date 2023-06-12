@@ -34,6 +34,8 @@ class CMainMenu {
 		 */
 		int run(int gameMode);
 
+	private:
+
 		/**
 		 * @brief Prints the main menu items to the screen.
 		 */
@@ -54,7 +56,6 @@ class CMainMenu {
 		 */
 		void printBanner() const;
 
-	protected:
 		/**
 		 * @brief Prompts the player to choose a difficulty level.
 		 */
@@ -69,7 +70,6 @@ class CMainMenu {
 		 * @throw runtime_error If the config file cannot be opened.
 		 */
 		void loadConfig(const std::string& fileName);
-
 
 		/**
 		 * @brief Loads the variable values from a config file into the input string stream parameter.
@@ -100,7 +100,7 @@ class CMainMenu {
 		 */
 		void decideFinalGameMode();
 
-	protected:	
+	private:	
 		int m_MenuItemStart,		/// Position of the first menu item
 			m_MenuItemEnd,			/// 	 -||-	    last    -||-
 			m_CursorPos,			/// Current cursor position in the menu

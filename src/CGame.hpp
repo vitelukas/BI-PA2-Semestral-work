@@ -7,7 +7,7 @@
 #include "CGhost_3.hpp"
 #include <stdio.h>
 #include <iostream>
-
+#include <memory>
 #pragma once
 
 
@@ -24,13 +24,13 @@ class CGame {
 		 */
 		CGame();
 
+	private:
 		/**
 		 * @brief Runs the game with the specified game mode.
 		 * @param gameMode The game mode to be set and played.
 		 */
 		void run(const CGameMode &gameMode);
 
-	protected:
 		/**
 		 * @brief Initializes the game with the specified game mode.
 		 * @param gameMode The game mode to be initialized/set.
@@ -68,6 +68,11 @@ class CGame {
 		void setEntityAfterCollision(int whichEntity = -1);
 
 		/**
+		 * @brief Starts the berserk mode for the player and the ghosts.
+		 */
+		void goBerserk();
+
+		/**
 		 * @brief Reloads the game map.
 		 */
 		void reloadMap() const;
@@ -81,9 +86,10 @@ class CGame {
 		void setEntities(char entity, size_t y, size_t x);
 
 		/**
-		 * @brief Starts the berserk mode for the player and the ghosts.
+		 * @brief Sets the game configuration based on the provided game mode.
+		 * @param gameMode The game mode with the desired configuration.
 		 */
-		void goBerserk();
+		void setGameConfig(const CGameMode &gameMode);
 
 		/**
 		 * @brief Displays the message for winning the game.
@@ -95,21 +101,13 @@ class CGame {
 		 */
 		void playerLost() const;
 
-		/**
-		 * @brief Sets the game configuration based on the provided game mode.
-		 * @param gameMode The game mode with the desired configuration.
-		 */
-		void setGameConfig(const CGameMode &gameMode);
-
-	protected:
+	private:
 		int m_GameMode;
 		bool m_GameIsDone;
 		unsigned int m_ScoreToWin, m_EatenGhosts;
 		std::string m_MapFile;
-		CMap m_Map;	
+		CMap m_Map;
 		CPlayer m_Player;
-		CGhost_1 m_Ghost_1;
-		CGhost_2 m_Ghost_2;
-		CGhost_3 m_Ghost_3;
+    	std::vector<std::shared_ptr<CGhost>> m_Ghosts;
 		friend class CMainMenu;
 };

@@ -24,6 +24,19 @@ class CEntity {
 		virtual ~CEntity() {}
 
 		/**
+		 * @brief Gets the current position of the entity.
+		 * @return The current position of the entity as a pair of coordinates (y, x).
+		 */
+		std::pair<size_t, size_t> getPosition() const;
+
+		/**
+		 * @brief Gets the current direction of the entity.
+		 * @return The current direction of the entity.
+		 */
+		char getDirection() const;
+
+	protected:
+		/**
 		 * @brief Pure virtual method for deciding the move direction of an entity.
 		 *
 		 * This method is responsible for deciding the move direction of the entity
@@ -115,18 +128,6 @@ class CEntity {
 		 * @param tile The tile character to be formated.
 		 */
 		void formatTile(char& tile) const;
-
-		/**
-		 * @brief Gets the current position of the entity.
-		 * @return The current position of the entity as a pair of coordinates (y, x).
-		 */
-		std::pair<size_t, size_t> getPosition() const;
-
-		/**
-		 * @brief Gets the current direction of the entity.
-		 * @return The current direction of the entity.
-		 */
-		char getDirection() const;
 
 	protected:
 		//		y		x

@@ -2,8 +2,8 @@
 using namespace std;
 using namespace std::chrono;
 
-CGhost_1::CGhost_1() 
-    : CGhost()
+CGhost_1::CGhost_1(int entityLook) 
+	: CGhost(entityLook)
 {
     m_Character = '&';
     m_EntityLook = 5;
