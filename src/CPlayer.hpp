@@ -94,7 +94,7 @@ class CPlayer : public CEntity {
 	private:
 		char m_PrevDirection;
 		bool m_IsBerserk;
-		unsigned int m_Lives, m_Score;
-    	std::chrono::milliseconds m_BerserkDuration;
+        unsigned int m_Lives, m_Score, m_FinalScore;
+        std::chrono::milliseconds m_BerserkDuration;
 		friend class CGame;
 };

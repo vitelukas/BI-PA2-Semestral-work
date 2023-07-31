@@ -5,7 +5,7 @@ using namespace std;
 
 CMainMenu::CMainMenu() {
     clear();
-	getmaxyx(stdscr, m_Height, m_Width);
+    getmaxyx(stdscr, m_Height, m_Width);
     m_MenuItemStart = m_Height >= 20 ? 12 : 2;
     m_CursorPos = m_MenuItemStart;
     m_ChooseDifficulty = m_MenuItemStart + 1;
@@ -22,37 +22,35 @@ int CMainMenu::run(int gameMode) {
     char getInput;
     // -1 == wait until there is an input from user
     timeout(-1);
-    
+
     initialPrint();
 
     // Run the main menu until the player chooses to play the game or end the program
-    while(true){
+    while (true) {
         update();
-        
+
         // Wait for the user input
         getInput = tolower(getch());
         // Clear the previous choice
         mvprintw(m_CursorPos, m_xOffset, "   ");
 
-        if( getInput == 'w' ) {
+        if (getInput == 'w') {
             m_CursorPos--;
-        }
-        else if( getInput == 's') {
+        } else if (getInput == 's') {
             m_CursorPos++;
         }
-        
+
         // Switch the cursor position to the last, respectively first position,
         // if the cursor position underflows / overflows the menu item list
         if (m_CursorPos < m_MenuItemStart) {
-			m_CursorPos = m_MenuItemEnd;
-		}
-        else if (m_CursorPos > m_MenuItemEnd ) {
-			m_CursorPos = m_MenuItemStart;
-		}
+            m_CursorPos = m_MenuItemEnd;
+        } else if (m_CursorPos > m_MenuItemEnd) {
+            m_CursorPos = m_MenuItemStart;
+        }
 
         // Choose what action should be performed based on the current cursor position
         if (getInput == '\n') {
-            if ( m_CursorPos == m_MenuItemStart ) {
+            if (m_CursorPos == m_MenuItemStart) {
                 decideFinalGameMode();
 
                 m_Game.run(m_FinalGameMode);
@@ -60,18 +58,15 @@ int CMainMenu::run(int gameMode) {
                 // Allow the user to sign the leaderboard after he finishes the game
                 m_LeaderBoard.makeEntry(m_Game.m_Player.getScore());
 
-                // return value 1 == start main menu again 
+                // return value 1 == start main menu again
                 return m_Game.m_GameMode;
-            } 
-            else if ( m_CursorPos == m_ChooseDifficulty) {
+            } else if (m_CursorPos == m_ChooseDifficulty) {
                 chooseDifficulty();
                 initialPrint();
-            } 
-            else if ( m_CursorPos == m_ShowLeaderboard) {
+            } else if (m_CursorPos == m_ShowLeaderboard) {
                 m_LeaderBoard.showLeaderboard();
                 initialPrint();
-            } 
-            else if( m_CursorPos == m_MenuItemEnd ) {
+            } else if (m_CursorPos == m_MenuItemEnd) {
                 // Return 0 == dont't run the main menu again
                 return 0;
             }
@@ -109,80 +104,76 @@ void CMainMenu::prnt() const {
     mvprintw(y++, x, "Down -> s");
     mvprintw(y++, x, "Left -> a");
     mvprintw(y++, x, "Right -> d");
-    mvprintw(y+1, x, "\nPress enter to confirm your choice");
+    mvprintw(y + 1, x, "\nPress enter to confirm your choice");
 }
 
 void CMainMenu::chooseDifficulty() {
     clear();
-    int positionEasy = m_Height/2 - 4;
-    int positionMedium = m_Height/2 - 2;
-    int positionHard = m_Height/2;
+    int positionEasy = m_Height / 2 - 4;
+    int positionMedium = m_Height / 2 - 2;
+    int positionHard = m_Height / 2;
 
     int choice = positionEasy;
 
     attron(A_STANDOUT);
-    mvprintw(positionEasy -4, m_Width/2 - 8, "CHOOSE DIFFICULTY");
+    mvprintw(positionEasy - 4, m_Width / 2 - 8, "CHOOSE DIFFICULTY");
     attroff(A_STANDOUT);
 
-    mvprintw(positionEasy, m_Width/2 - 2, "EASY");
-    mvprintw(positionMedium, m_Width/2 - 3, "MEDIUM");
-    mvprintw(positionHard, m_Width/2 - 2, "HARD");
+    mvprintw(positionEasy, m_Width / 2 - 2, "EASY");
+    mvprintw(positionMedium, m_Width / 2 - 3, "MEDIUM");
+    mvprintw(positionHard, m_Width / 2 - 2, "HARD");
 
     // Stay in the choose difficulty menu, until the user chooses a difficulty
-    while(true){
-        mvprintw(choice, m_Width/2 - 6, ">> ");
+    while (true) {
+        mvprintw(choice, m_Width / 2 - 6, ">> ");
         refresh();
-        
-        char getInput = tolower(getch());
-        mvprintw(choice, m_Width/2 - 6, "   ");
 
-        if( getInput == 'w' ) {
+        char getInput = tolower(getch());
+        mvprintw(choice, m_Width / 2 - 6, "   ");
+
+        if (getInput == 'w') {
             choice -= 2;
-        }
-        else if( getInput == 's') {
+        } else if (getInput == 's') {
             choice += 2;
         }
 
         // Switch the choice(cursor position) to the last, respectively first position,
         // if the cursor position underflows / overflows the menu item list
         if (choice < positionEasy) {
-			choice = positionHard;
-		}
-        else if (choice > positionHard ) {
-			choice = positionEasy;
-		}
+            choice = positionHard;
+        } else if (choice > positionHard) {
+            choice = positionEasy;
+        }
 
         // Choose what action should be performed based on the cursor position
         if (getInput == '\n') {
-            if ( choice == positionEasy) {
+            if (choice == positionEasy) {
                 m_Game.m_GameMode = 1;
-            } 
-            else if ( choice == positionMedium) {
+            } else if (choice == positionMedium) {
                 m_Game.m_GameMode = 2;
-            } 
-            else if( choice == positionHard ) {
+            } else if (choice == positionHard) {
                 m_Game.m_GameMode = 3;
             }
             break;
         }
     }
-        
+
     return;
 }
 
 void CMainMenu::decideFinalGameMode() {
     switch (m_Game.m_GameMode) {
-        case 1:
-            m_FinalGameMode = m_PlayEasy;
-            break;
-        case 2:
-            m_FinalGameMode = m_PlayMedium;
-            break;
-        case 3:
-            m_FinalGameMode = m_PlayHard;
-            break;
-        default:
-            break;
+    case 1:
+        m_FinalGameMode = m_PlayEasy;
+        break;
+    case 2:
+        m_FinalGameMode = m_PlayMedium;
+        break;
+    case 3:
+        m_FinalGameMode = m_PlayHard;
+        break;
+    default:
+        break;
     }
 }
 
@@ -198,13 +189,13 @@ void CMainMenu::loadConfig(const string &fileName) {
     string mapFile;
     int lives, entitySpeed, ghostSlower, berserkDuration;
     int numOfLines = 0;
-    bool mapFlag, easyFlag, mediumFlag, hardFlag;
-    mapFlag = easyFlag = mediumFlag = hardFlag = false;
+    bool mapFlag1, mapFlag2, easyFlag, mediumFlag, hardFlag;
+    mapFlag1 = mapFlag2 = easyFlag = mediumFlag = hardFlag = false;
 
-    if ( !configFile.is_open() ) {
-		cerr << "Error while opening the config file!" << endl;
-		throw runtime_error("Failed to open the config file.");
-	}
+    if (!configFile.is_open()) {
+        cerr << "Error while opening the config file!" << endl;
+        throw runtime_error("Failed to open the config file.");
+    }
 
     // Read the confif file while there are lines to be processed
     while (getline(configFile, line)) {
@@ -216,28 +207,31 @@ void CMainMenu::loadConfig(const string &fileName) {
         istringstream iss(line);
 
         // Store the values in appropriate object attributes
-        if (line.find("Map") != string::npos) {          // Handle Easy game mode 
+        if (line.find("Map") != string::npos) { // Handle loading the first map
             getAttributes(configFile, iss, numOfLines);
             iss >> mapFile;
-            m_Game.m_MapFile = mapFile;
-            m_PlayEasy.setAttributes(lives, entitySpeed, ghostSlower, berserkDuration);
-            mapFlag = true;
-        }
-        else if (line.find("Easy") != string::npos) {          // Handle Easy game mode 
+            checkMapFile(iss);
+            m_Game.m_FirstMapFile = mapFile;
+            mapFlag1 = true;
+            // Handle loading the second map
+            getAttributes(configFile, iss, numOfLines);
+            iss >> mapFile;
+            checkMapFile(iss);
+            m_Game.m_SecondMapFile = mapFile;
+            mapFlag2 = true;
+        } else if (line.find("Easy") != string::npos) { // Handle Easy game mode
             getAttributes(configFile, iss, numOfLines);
             iss >> lives >> entitySpeed >> ghostSlower >> berserkDuration;
             checkAttrs(iss, lives, entitySpeed, ghostSlower, berserkDuration);
             m_PlayEasy.setAttributes(lives, entitySpeed, ghostSlower, berserkDuration);
             easyFlag = true;
-        } 
-        else if (line.find("Medium") != string::npos) {   // Handle Medium game mode
+        } else if (line.find("Medium") != string::npos) { // Handle Medium game mode
             getAttributes(configFile, iss, numOfLines);
             iss >> lives >> entitySpeed >> ghostSlower >> berserkDuration;
             checkAttrs(iss, lives, entitySpeed, ghostSlower, berserkDuration);
             m_PlayMedium.setAttributes(lives, entitySpeed, ghostSlower, berserkDuration);
             mediumFlag = true;
-        } 
-        else if (line.find("Hard") != string::npos) {     // Handle Hard game mode
+        } else if (line.find("Hard") != string::npos) { // Handle Hard game mode
             getAttributes(configFile, iss, numOfLines);
             iss >> lives >> entitySpeed >> ghostSlower >> berserkDuration;
             checkAttrs(iss, lives, entitySpeed, ghostSlower, berserkDuration);
@@ -253,9 +247,9 @@ void CMainMenu::loadConfig(const string &fileName) {
 
     configFile.close();
 
-    if ( !(mapFlag && easyFlag && mediumFlag && hardFlag) ) {
+    if (!(mapFlag1 && mapFlag2 && easyFlag && mediumFlag && hardFlag)) {
         cerr << "Error while loading the config file!" << endl;
-		throw runtime_error("The config file doesn't have the right structure: at least one game mode specification is missing!");
+        throw runtime_error("The config file doesn't have the right structure: at least one game mode specification is missing!");
     }
 
     return;
@@ -263,22 +257,21 @@ void CMainMenu::loadConfig(const string &fileName) {
 
 void CMainMenu::checkAttrs(istringstream &iss, const int &lives, const int &entitySpeed, const int &ghostSlower, const int &berserkDuration) {
     // Check if the loading failed - if it failed the format of the values was incorrect or atleast one of the values was missing
-    if ( iss.fail() ) {
+    if (iss.fail()) {
         cerr << "Error while loading attribute values!" << endl;
-		throw runtime_error("Error while loading attribute values: not all values were specified, or the values are not numbers!");
+        throw runtime_error("Error while loading attribute values: not all values were specified, or the values are not numbers!");
     }
 
-    if ( lives < 0 || entitySpeed < 0 || ghostSlower < 0 || berserkDuration < 0 ) {
+    if (lives < 0 || entitySpeed < 0 || ghostSlower < 0 || berserkDuration < 0) {
         cerr << "Error while loading attribute values!" << endl;
-		throw runtime_error("Error while loading attribute values: the attribute values cannot have negative value!");
+        throw runtime_error("Error while loading attribute values: the attribute values cannot have negative value!");
     }
 
     int dummy;
     if (iss >> dummy) {
         cerr << "Error while loading attribute values!" << endl;
         throw runtime_error("Error while loading attribute values: too many attributes!");
-    }  
-
+    }
 }
 
 void CMainMenu::getAttributes(ifstream &configFile, istringstream &iss, int &numOfLines) {
@@ -295,12 +288,19 @@ void CMainMenu::getAttributes(ifstream &configFile, istringstream &iss, int &num
     }
 }
 
+void CMainMenu::checkMapFile(const istringstream &iss) {
+    if (iss.fail()) {
+        cerr << "Error while loading attribute values!" << endl;
+        throw runtime_error("Error while loading the map file!");
+    }
+}
+
 void CMainMenu::printBanner() const {
     if (m_Height <= 20)
         return;
-    
+
     int start = 1;
-    int x = m_Width/2 - 35;
+    int x = m_Width / 2 - 35;
     mvprintw(start++, x, " ______   ______     ______           __    __     ______     __   __\n");
     mvprintw(start++, x, "/\\  == \\ /\\  __ \\   /\\  ___\\         /\\ \"-./  \\   /\\  __ \\   /\\ \"-.\\ \\\n");
     mvprintw(start++, x, "\\ \\  _-/ \\ \\  __ \\  \\ \\ \\____  _____ \\ \\ \\-./\\ \\  \\ \\  __ \\  \\ \\ \\-.  \\\n");

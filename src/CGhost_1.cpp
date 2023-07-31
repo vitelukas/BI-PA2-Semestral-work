@@ -32,6 +32,7 @@ void CGhost_1::findShortestPath(CMap &gameMap, const CEntity &player, size_t &ne
     vector<vector<bool>> visited(gameMap.m_Height, vector<bool>(gameMap.m_Width, false));
     vector<vector<pair<size_t, size_t>>> parent(gameMap.m_Height, vector<pair<size_t, size_t>>(gameMap.m_Width, make_pair(SIZE_MAX, SIZE_MAX)));
     char futureDir = 'n';
+    bool found = false;
 
     // Repeat the BFS algorithm until we find a valid path towards the player
     // (if the current found path would mean that the ghost would have to turn around -> search again)
@@ -46,8 +47,10 @@ void CGhost_1::findShortestPath(CMap &gameMap, const CEntity &player, size_t &ne
             q.pop();
 
             // Break the algorithm if we found the shortest path to the player's position
-            if (current == player.getPosition())
+            if (current == player.getPosition()) {
+                found = true;
                 break;
+            }
 
             // Check adjacent cells
             vector<pair<size_t, size_t>> neighbors = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
@@ -65,7 +68,7 @@ void CGhost_1::findShortestPath(CMap &gameMap, const CEntity &player, size_t &ne
         }
 
         // If the queue is empty and player's position was not reached, break the loop
-        if (q.empty()) {
+        if (!found) {
             // Set the next position to the current position so that the ghost will move in his current direction
             nextRow = m_Position.first;
             nextCol = m_Position.second;
@@ -87,6 +90,7 @@ void CGhost_1::findShortestPath(CMap &gameMap, const CEntity &player, size_t &ne
         visited.assign(gameMap.m_Height, vector<bool>(gameMap.m_Width, false));
         parent.assign(gameMap.m_Height, vector<pair<size_t, size_t>>(gameMap.m_Width, make_pair(SIZE_MAX, SIZE_MAX)));
         path.clear();
+        found = false;
 
         // Add the futurePosition into the visited in case it won't be valid ( == the direction to move towards this position is banned)
         visited[nextRow][nextCol] = true;

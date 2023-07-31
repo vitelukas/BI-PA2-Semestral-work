@@ -8,7 +8,7 @@ LIBS= -lncurses
 # Specify the directory for documentation files
 
 # Specify the name of the final executable file (Pacman)
-EXECUTABLE=vitebluk
+EXECUTABLE=Pacman
 
 DOCDIR=./doc
 # Specify the directory for source files

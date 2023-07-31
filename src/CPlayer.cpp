@@ -7,11 +7,11 @@ CPlayer::CPlayer()
 	: CEntity()
 {
 	m_PrevDirection = 'n';
-	m_Score = 0;
-	m_Lives = 3;
-	m_Character = 'p';
-	m_EntityLook = 4;
-	m_IsBerserk = false;
+    m_Score = m_FinalScore = 0;
+    m_Lives = 3;
+    m_Character = 'p';
+    m_EntityLook = 4;
+    m_IsBerserk = false;
 
 	m_BerserkDuration = milliseconds(3000);
 	m_Speed = milliseconds(160);
@@ -133,7 +133,7 @@ bool CPlayer::checkIfCollisions(CMap &gameMap, pair<size_t, size_t> position) {
 }
 
 unsigned int CPlayer::getScore() const {
-	return m_Score;
+    return m_FinalScore;
 }
 
 bool CPlayer::getBerserk() const {
