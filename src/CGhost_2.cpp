@@ -34,15 +34,16 @@ void CGhost_2::decideMoveDirection(CMap& gameMap, const CEntity& player) {
 void CGhost_2::findShortestPath(CMap& gameMap, const CEntity& player, size_t &nextRow, size_t &nextCol) {
     vector<vector<bool>> visited(gameMap.m_Height, vector<bool>(gameMap.m_Width, false));
     vector<vector<pair<size_t, size_t>>> parent(gameMap.m_Height, vector<pair<size_t, size_t>>(gameMap.m_Width, make_pair(SIZE_MAX, SIZE_MAX)));
+    pair<size_t, size_t> playersPosition = player.getPosition();
     char futureDir = 'n';
-	pair<size_t, size_t> playersPosition = player.getPosition();
+    bool found = false;
 
-	if (player.getDirection() == 'a' || player.getDirection() == 'd') {
-		playersPosition.second = min(player.getPosition().second + 4, gameMap.m_Width-2);
-	} else {
-		playersPosition.first = min(player.getPosition().first + 4, gameMap.m_Height-2);
-		playersPosition.second = min(player.getPosition().second + 4, gameMap.m_Width-2);
-	}
+    if (player.getDirection() == 'a' || player.getDirection() == 'd') {
+        playersPosition.second = min(player.getPosition().second + 4, gameMap.m_Width - 2);
+    } else {
+        playersPosition.first = min(player.getPosition().first + 4, gameMap.m_Height - 2);
+        playersPosition.second = min(player.getPosition().second + 4, gameMap.m_Width - 2);
+    }
 
     // Repeat the BFS algorithm until we find a valid path towards the player
     // (if the current found path would mean that the ghost would have to turn around -> search again)
@@ -57,8 +58,10 @@ void CGhost_2::findShortestPath(CMap& gameMap, const CEntity& player, size_t &ne
             q.pop();
 
             // Break the algorithm if we found the shortest path to the player's position
-            if (current == playersPosition)
+            if (current == playersPosition) {
+                found = true;
                 break;
+            }
 
             // Check adjacent cells
             vector<pair<size_t, size_t>> neighbors = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
@@ -76,7 +79,7 @@ void CGhost_2::findShortestPath(CMap& gameMap, const CEntity& player, size_t &ne
         }
 
         // If the queue is empty and player's position is not reached, break the do while loop (BFS algorithm)
-        if (q.empty()) {
+        if (!found) {
             // Set the next position to the current position so that the ghost will move in his current direction
             nextRow = m_Position.first;
             nextCol = m_Position.second;
@@ -98,6 +101,7 @@ void CGhost_2::findShortestPath(CMap& gameMap, const CEntity& player, size_t &ne
         visited.assign(gameMap.m_Height, vector<bool>(gameMap.m_Width, false));
         parent.assign(gameMap.m_Height, vector<pair<size_t, size_t>>(gameMap.m_Width, make_pair(SIZE_MAX, SIZE_MAX)));
         path.clear();
+        found = false;
 
         // Add the futurePosition into the visited in case it won't be valid ( == the direction to move towards this position is banned)
         visited[nextRow][nextCol] = true;

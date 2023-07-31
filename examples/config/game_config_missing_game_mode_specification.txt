@@ -1,5 +1,8 @@
--Map-
+-Maps-
+# Map_1
 examples/maps/main_map.txt
+# Map 2
+examples/maps/map_1.txt
 -Easy-
 3 160 200 6000
 

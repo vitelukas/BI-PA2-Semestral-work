@@ -1,8 +1,13 @@
--Map-
+-Maps-
+# Map_1
 examples/maps/main_map.txt
+# Map 2
+examples/maps/map_1.txt
 -Easy-
 3 160 200 6000
 -Medium-
 2 160 100 4500
 -Hard-
 1 160 20 3000
+
+# lives | entities speed (ms) | ghosts slowdown (ms) | berseker mode duration (ms) 
